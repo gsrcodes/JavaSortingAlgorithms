@@ -281,16 +281,26 @@ public class List {
             quickWithP(i, end);
     }
 
+    // This implementation is not as optimized as other sorting algorithms,
+    // but it's kept concise with minimum lines of code.
     public void combSort() {
         for (int gap = logicalSize; gap >= 1; gap = (int) (gap / 1.3))
-            for (int i = 0, aux; i < logicalSize; i++) {
-                if (i + gap < logicalSize) {
-                    if (getNode(i).getInfo() > getNode(i + gap).getInfo()) {
-                        aux = getNode(i).getInfo();
-                        getNode(i).setInfo(getNode(i + gap).getInfo());
-                        getNode(i + gap).setInfo(aux);
-                    }
-                }
+            for (int i = 0; i < logicalSize; i++)
+                if (i + gap < logicalSize)
+                    if (getNode(i).getInfo() > getNode(i + gap).getInfo())
+                        swaps(getNode(i), getNode(i + gap));
+    }
+
+    public void gnomeSort() {
+        int aux;
+        for (int i = 0; i < logicalSize - 1; i++) {
+            if (getNode(i).getInfo() > getNode(i).getNext().getInfo()) {
+                aux = getNode(i).getInfo();
+                getNode(i).setInfo(getNode(i).getNext().getInfo());
+                getNode(i).getNext().setInfo(aux);
+                i = -1;
+                System.out.println(aux);
             }
+        }
     }
 }

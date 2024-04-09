@@ -128,4 +128,21 @@ public class List {
             start = start.getNext();
         }
     }
+
+    public void insertionSort() {
+        Node startSearch = this.start.getNext(), posPointer;
+        int auxInt;
+
+        while(startSearch != null) {
+            auxInt = startSearch.getInfo();
+            posPointer = startSearch;
+            while(posPointer != this.start && auxInt < posPointer.getPrev().getInfo()){
+                posPointer.setInfo(posPointer.getPrev().getInfo());
+                posPointer = posPointer.getPrev();
+            }
+
+            posPointer.setInfo(auxInt);
+            startSearch = startSearch.getNext();
+        }
+    }
 }

@@ -62,9 +62,8 @@ public class List {
 
     private Node getNode(int pos) { // Get x node by position
         Node aux = start;
-        for (int i = 0; i < pos; i++) {
+        for (int i = 0; i < pos; i++)
             aux = aux.getNext();
-        }
         return aux;
     }
 
@@ -186,14 +185,14 @@ public class List {
                 nodeChildR = getNode(ChildR);
                 nodeParent = getNode(parent);
 
-                if (ChildR < LS && nodeChildR.getInfo() > nodeChildL.getInfo()) {
+                // get the largest child
+                if (ChildR < LS && nodeChildR.getInfo() > nodeChildL.getInfo())
                     largestChild = nodeChildR;
-                } else {
+                else
                     largestChild = nodeChildL;
-                }
-                if (nodeParent.getInfo() < largestChild.getInfo()) {
+
+                if (nodeParent.getInfo() < largestChild.getInfo())
                     swaps(nodeParent, largestChild);
-                }
             }
             swaps(start, auxEnd);
             auxEnd = auxEnd.getPrev();
@@ -203,7 +202,7 @@ public class List {
 
     public void shellSort() {
         int LS = elementsAmount;
-        for (int gap = LS / 2; gap > 0; gap /= 2) { // gap = distance between elements to be compared
+        for (int gap = LS / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
             for (int i = gap; i < LS; i++) {
                 int currentValue = getNode(i).getInfo();
                 int j = i;
@@ -213,6 +212,42 @@ public class List {
                 }
                 getNode(j).setInfo(currentValue);
             }
+    }
+
+    public void quickWithoutPivot() {
+        this.quickWoutP(start, end);
+    }
+    private void quickWoutP(Node start, Node end)
+    {
+        Node i = start, j = end;
+        int aux;
+        while(i != null && i != j) {
+            while(i !=j && i.getInfo() <= j.getInfo())
+                i = i.getNext();
+            if(j.getInfo() != i.getInfo())
+            {
+                aux = i.getInfo();
+                i.setInfo(j.getInfo());
+                j.setInfo(aux);
+                j = j.getPrev();
+            }
+
+            while(i != j && j.getInfo() >= i.getInfo())
+                j = j.getPrev();
+
+            if(j.getInfo() != i.getInfo())
+            {
+                aux = i.getInfo();
+                i.setInfo(j.getInfo());
+                j.setInfo(aux);
+                i = i.getNext();
+            }
+
         }
+
+        if(start != i)
+            quickWoutP(start, i.getPrev());
+        if(end != j)
+            quickWoutP(j.getNext(), end);
     }
 }

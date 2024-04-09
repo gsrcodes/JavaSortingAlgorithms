@@ -200,4 +200,19 @@ public class List {
             LS--;
         }
     }
+
+    public void shellSort() {
+        int LS = elementsAmount;
+        for (int gap = LS / 2; gap > 0; gap /= 2) { // gap = distance between elements to be compared
+            for (int i = gap; i < LS; i++) {
+                int currentValue = getNode(i).getInfo();
+                int j = i;
+                while (j >= gap && getNode(j - gap).getInfo() > currentValue) {
+                    getNode(j).setInfo(getNode(j - gap).getInfo());
+                    j -= gap;
+                }
+                getNode(j).setInfo(currentValue);
+            }
+        }
+    }
 }

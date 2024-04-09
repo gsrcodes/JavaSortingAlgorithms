@@ -2,12 +2,12 @@ public class List {
     Node start;
     Node end;
 
-    int elementsAmount;
+    int logicalSize;
 
     public List() {
         this.start = null;
         this.end = null;
-        elementsAmount = 0;
+        logicalSize = 0;
     }
 
     public Node getStart() {
@@ -34,7 +34,7 @@ public class List {
             start.setPrev(newNode);
             start = newNode;
         }
-        elementsAmount++;
+        logicalSize++;
     }
 
     public void insertEnd(int info) {
@@ -45,7 +45,7 @@ public class List {
             end.setNext(newNode);
             end = newNode;
         }
-        elementsAmount++;
+        logicalSize++;
     }
 
     public void display() {
@@ -167,7 +167,7 @@ public class List {
 
     public void heapSort() {
         int ChildL, ChildR, parent;
-        int LS = elementsAmount; // Logical Size
+        int LS = logicalSize; // Logical Size
         Node nodeChildL;
         Node nodeChildR;
         Node nodeParent;
@@ -201,7 +201,7 @@ public class List {
     }
 
     public void shellSort() {
-        int LS = elementsAmount;
+        int LS = logicalSize;
         for (int gap = LS / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
             for (int i = gap; i < LS; i++) {
                 int currentValue = getNode(i).getInfo();
@@ -217,8 +217,7 @@ public class List {
     public void quickWithoutPivot() {
         this.quickWoutP(start, end);
     }
-    private void quickWoutP(Node start, Node end)
-    {
+    private void quickWoutP(Node start, Node end) {
         Node i = start, j = end;
         int aux;
         while(i != null && i != j) {
@@ -249,5 +248,40 @@ public class List {
             quickWoutP(start, i.getPrev());
         if(end != j)
             quickWoutP(j.getNext(), end);
+    }
+
+    public void quickWithPivot() {
+        quickWithP(0, logicalSize - 1);
+    }
+    private void quickWithP(int start, int end) {
+        int i = start, j = end, temp;
+        Node nodeI, nodeJ;
+        int pivot = getNode((i + j)/2).getInfo();
+        while(i < j)
+        {
+            nodeI = getNode(i);
+            while(nodeI.getInfo() < pivot) {
+                i++;
+                nodeI = nodeI.getNext();
+            }
+
+            nodeJ = getNode(j);
+            while(nodeJ.getInfo() > pivot) {
+                j--;
+                nodeJ = nodeJ.getPrev();
+            }
+
+            if(i <= j) {
+                temp = nodeI.getInfo();
+                nodeI.setInfo(nodeJ.getInfo());
+                nodeJ.setInfo(temp);
+                i++;
+                j--;
+            }
+        }
+        if(start < j)
+            quickWithP(start, j);
+        if(i < end)
+            quickWithP(i, end);
     }
 }

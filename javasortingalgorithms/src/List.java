@@ -509,4 +509,68 @@ public class List {
             nodeAux = nodeAux.getNext();
         }
     }
+
+    private void timInsertionSort(int left, int right) {
+        int temp, j;
+        for (int i = left + 1; i <= right; i++) {
+            temp = getNode(i).getInfo();
+            j = i - 1;
+            while (getNode(j).getInfo() > temp && j >= left) {
+                getNode(j + 1).setInfo(getNode(j).getInfo());
+                j--;
+            }
+            getNode(j + 1).setInfo(temp);
+        }
+    }
+
+    private void timMerge(int left, int middle, int right) {
+        int len1 = middle - left + 1, len2 = right - middle, i = 0, j = 0, k = left;
+        int[] leftArray = new int[len1];
+        int[] rightArray = new int[len2];
+        for (int x = 0; x < len1; x++)
+            leftArray[x] = getNode(left + x).getInfo();
+        for (int x = 0; x < len2; x++)
+            rightArray[x] = getNode(middle + 1 + x).getInfo();
+
+        while (i < len1 && j < len2) {
+            if (leftArray[i] <= rightArray[j]) {
+                getNode(k).setInfo(leftArray[i]);
+                i++;
+            }
+            else {
+                getNode(k).setInfo(rightArray[j]);
+                j++;
+            }
+            k++;
+        }
+
+        while (i < len1) {
+            getNode(k).setInfo(leftArray[i]);
+            k++;
+            i++;
+        }
+
+        while (j < len2) {
+            getNode(k).setInfo(rightArray[j]);
+            k++;
+            j++;
+        }
+    }
+
+    public void timSort() {
+        int n = logicalSize, RUN = 32;
+        int smaller;
+
+        for (int i = 0; i < n; i = i + RUN) {
+            smaller = Math.min(i + 31, n - 1); // smaller = math.min get the smaller between (x, y)
+            timInsertionSort(i, smaller);
+        }
+
+        for (int size = RUN; size < n; size = 2 * size)
+            for (int left = 0; left < n; left += 2 * size) {
+                int middle = left + size - 1;
+                int right = Math.min((left + 2 * size - 1), (n - 1));
+                timMerge(left, middle, right);
+            }
+    }
 }

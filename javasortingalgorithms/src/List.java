@@ -357,4 +357,156 @@ public class List {
             }
         }
     }
+
+    public void countingSort() {
+        int maior = getLargest();
+        int[] vet = new int[maior];
+        int tam = logicalSize;
+
+        for(int i=0; i<maior; i++)
+            vet[i] = 0;
+
+        Node aux = start;
+        while(aux != null) {
+            vet[aux.getInfo()-1]++; // frequency array
+            aux = aux.getNext();
+        }
+
+        for(int i=1; i<maior; i++) // sum array
+            vet[i] += vet[i-1];
+
+        List listAux = new List();
+        for(int i=0; i<=tam; i++)
+            listAux.insertEnd(0);
+
+        aux = start;
+        Node nodeAux;
+        while(aux!= null) {
+            nodeAux = listAux.getStart();
+            int i=0;
+            while(nodeAux != null && i < vet[aux.getInfo()-1]-1) {
+                i++;
+                nodeAux = nodeAux.getNext();
+            }
+            vet[aux.getInfo()-1]--;
+            nodeAux.setInfo(aux.getInfo());
+            aux = aux.getNext();
+        }
+
+        aux = start;
+        nodeAux = listAux.getStart();
+        while(aux != null && nodeAux != null) {
+            aux.setInfo(nodeAux.getInfo());
+            aux = aux.getNext();
+            nodeAux = nodeAux.getNext();
+        }
+    }
+
+    private void partition1(int len, List part1, List part2) {
+        Node auxStart = start;
+        Node auxMiddle = getNode(len/2);
+
+        while(auxStart != auxMiddle) {
+            part1.insertEnd(auxStart.getInfo());
+            auxStart = auxStart.getNext();
+        }
+        while(auxMiddle != null) {
+            part2.insertEnd(auxMiddle.getInfo());
+            auxMiddle = auxMiddle.getNext();
+        }
+    }
+
+    public void fusion1 (List part1, List part2, int seq, int len) {
+        Node  nodeI = part1.getStart(), nodeJ = part2.getStart(), startAux = start;
+        int auxSeq = seq, startAuxPos=0, nodeIPos=0, nodeJPos=0;
+        while(startAuxPos < len) {
+            while(nodeIPos < seq && nodeJPos < seq) {
+                if(nodeI.getInfo() < nodeJ.getInfo()) {
+                    startAux.setInfo(nodeI.getInfo());
+                    nodeI = nodeI.getNext();
+                    nodeIPos++;
+                }
+                else {
+                    startAux.setInfo(nodeJ.getInfo());
+                    nodeJ = nodeJ.getNext();
+                    nodeJPos++;
+                }
+                startAux = startAux.getNext();
+                startAuxPos++;
+            }
+            while(nodeIPos < seq) {
+                startAux.setInfo(nodeI.getInfo());
+                startAux = startAux.getNext();
+                startAuxPos++;
+                nodeI = nodeI.getNext();
+                nodeIPos++;
+            }
+            while(nodeJPos < seq) {
+                startAux.setInfo(nodeJ.getInfo());
+                startAux = startAux.getNext();
+                startAuxPos++;
+                nodeJ = nodeJ.getNext();
+                nodeJPos++;
+            }
+            seq += auxSeq;
+        }
+    }
+
+    public void mergeSort1() {
+        List part1 = new List();
+        List part2 = new List();
+        for (int seq = 1; seq < logicalSize; seq *= 2) {
+            partition1(logicalSize, part1, part2);
+            fusion1(part1, part2, seq, logicalSize);
+        }
+    }
+
+    public void radixSort()
+    {
+        int maior = getLargest();
+        for(int i=1; maior/i > 0; i*=10)
+            radixCountingSort(i);
+    }
+
+    public void radixCountingSort(int v) // radixSort
+    {
+        int pos, j, i;
+        int[] vet = new int[10];
+        List listAux = new List();
+        for(i=  0; i <= logicalSize; i++)
+            listAux.insertEnd(0);
+
+        Node nodeAux = start;
+        for(i = 0; i < logicalSize; i++) {
+            vet[(nodeAux.getInfo()/v)%10]++;
+            nodeAux = nodeAux.getNext();
+        }
+
+        for(i = 1; i < 10; i++)
+            vet[i] += vet[i-1];
+
+        Node auxEnd = end;
+        for(i = logicalSize; i > 0; i--)
+        {
+            pos = vet[(auxEnd.getInfo()/v) %10]-1;
+            j = 0;
+            nodeAux = listAux.getStart();
+            while(nodeAux != null && j < pos) {
+                nodeAux = nodeAux.getNext();
+                j++;
+            }
+            nodeAux.setInfo(auxEnd.getInfo());
+            vet[(auxEnd.getInfo()/v)%10]--;
+            auxEnd = auxEnd.getPrev();
+        }
+
+        Node startAux = start;
+        nodeAux = listAux.getStart();
+        while (startAux != null && nodeAux != null)
+        {
+            startAux.setInfo(nodeAux.getInfo());
+            startAux = startAux.getNext();
+            nodeAux = nodeAux.getNext();
+        }
+    }
 }

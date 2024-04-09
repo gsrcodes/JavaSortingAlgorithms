@@ -201,16 +201,15 @@ public class List {
     }
 
     public void shellSort() {
-        int LS = logicalSize;
-        for (int gap = LS / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
-            for (int i = gap; i < LS; i++) {
-                int currentValue = getNode(i).getInfo();
+        for (int gap = logicalSize / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
+            for (int i = gap; i < logicalSize; i++) {
+                int current = getNode(i).getInfo();
                 int j = i;
-                while (j >= gap && getNode(j - gap).getInfo() > currentValue) {
+                while (j >= gap && getNode(j - gap).getInfo() > current) {
                     getNode(j).setInfo(getNode(j - gap).getInfo());
                     j -= gap;
                 }
-                getNode(j).setInfo(currentValue);
+                getNode(j).setInfo(current);
             }
     }
 
@@ -223,8 +222,7 @@ public class List {
         while(i != null && i != j) {
             while(i !=j && i.getInfo() <= j.getInfo())
                 i = i.getNext();
-            if(j.getInfo() != i.getInfo())
-            {
+            if(j.getInfo() != i.getInfo()) {
                 aux = i.getInfo();
                 i.setInfo(j.getInfo());
                 j.setInfo(aux);
@@ -234,8 +232,7 @@ public class List {
             while(i != j && j.getInfo() >= i.getInfo())
                 j = j.getPrev();
 
-            if(j.getInfo() != i.getInfo())
-            {
+            if(j.getInfo() != i.getInfo()) {
                 aux = i.getInfo();
                 i.setInfo(j.getInfo());
                 j.setInfo(aux);
@@ -257,8 +254,7 @@ public class List {
         int i = start, j = end, temp;
         Node nodeI, nodeJ;
         int pivot = getNode((i + j)/2).getInfo();
-        while(i < j)
-        {
+        while(i < j) {
             nodeI = getNode(i);
             while(nodeI.getInfo() < pivot) {
                 i++;
@@ -283,5 +279,18 @@ public class List {
             quickWithP(start, j);
         if(i < end)
             quickWithP(i, end);
+    }
+
+    public void combSort() {
+        for (int gap = logicalSize; gap >= 1; gap = (int) (gap / 1.3))
+            for (int i = 0, aux; i < logicalSize; i++) {
+                if (i + gap < logicalSize) {
+                    if (getNode(i).getInfo() > getNode(i + gap).getInfo()) {
+                        aux = getNode(i).getInfo();
+                        getNode(i).setInfo(getNode(i + gap).getInfo());
+                        getNode(i + gap).setInfo(aux);
+                    }
+                }
+            }
     }
 }

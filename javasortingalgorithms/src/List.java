@@ -68,10 +68,72 @@ public class List {
     }
 
 
-    private void swaps(Node one, Node two) {
-        int temp = one.getInfo();
-        one.setInfo(two.getInfo());
-        two.setInfo(temp);
+    private void swaps(Node i, Node j) {
+        int temp = i.getInfo();
+        i.setInfo(j.getInfo());
+        j.setInfo(temp);
+    }
+
+    public int binnarySearch(int key, int LS) {
+        int start = 0, end = LS - 1, middle = LS / 2;
+
+        Node aux = getNode(middle);
+        while (start < end && aux.getInfo() != key) {
+            if (aux.getInfo() == key)
+                return middle;
+            else if (key > aux.getInfo())
+                start = middle + 1;
+                else
+                end = middle - 1;
+
+            middle = (start + end) / 2;
+            aux = getNode(middle);
+        }
+        if (key > aux.getInfo())
+            return middle + 1;
+        return middle;
+    }
+
+    public int getLargest() {
+        int i = 0, largest = 0;
+        while (i < logicalSize) {
+            if (getNode(i).getInfo() > largest) {
+                largest = getNode(i).getInfo();
+            }
+            i++;
+        }
+        return largest;
+    }
+
+    // Sort Algorithms
+
+    public void InsertionSort() {
+        int aux;
+        Node i, pos;
+        i = start.getNext();
+        while (i != null) {
+            aux = i.getInfo();
+            pos = i;
+            while (pos != start && aux < pos.getPrev().getInfo()) {
+                pos.setInfo(pos.getPrev().getInfo());
+                pos = pos.getPrev();
+            }
+            pos.setInfo(aux);
+            i = i.getNext();
+        }
+    }
+
+    public void binaryInsertionSort() {
+        int aux, pos;
+        for (int i = 1; i < logicalSize; i++) {
+            aux = getNode(i).getInfo();
+            pos = binnarySearch(aux, i);
+
+            for (int j = i; j > pos; j--)
+                getNode(j).setInfo(getNode(j - 1).getInfo());
+
+            getNode(pos).setInfo(aux);
+        }
     }
 
     public void selectionSort() {
@@ -218,24 +280,18 @@ public class List {
     }
     private void quickWoutP(Node start, Node end) {
         Node i = start, j = end;
-        int aux;
         while(i != null && i != j) {
             while(i !=j && i.getInfo() <= j.getInfo())
                 i = i.getNext();
             if(j.getInfo() != i.getInfo()) {
-                aux = i.getInfo();
-                i.setInfo(j.getInfo());
-                j.setInfo(aux);
+                swaps(i, j);
                 j = j.getPrev();
             }
 
             while(i != j && j.getInfo() >= i.getInfo())
                 j = j.getPrev();
-
             if(j.getInfo() != i.getInfo()) {
-                aux = i.getInfo();
-                i.setInfo(j.getInfo());
-                j.setInfo(aux);
+                swaps(i, j);
                 i = i.getNext();
             }
 
@@ -251,10 +307,10 @@ public class List {
         quickWithP(0, logicalSize - 1);
     }
     private void quickWithP(int start, int end) {
-        int i = start, j = end, temp;
+        int i = start, j = end;
         Node nodeI, nodeJ;
         int pivot = getNode((i + j)/2).getInfo();
-        while(i < j) {
+        while(i <= j) {
             nodeI = getNode(i);
             while(nodeI.getInfo() < pivot) {
                 i++;
@@ -268,9 +324,7 @@ public class List {
             }
 
             if(i <= j) {
-                temp = nodeI.getInfo();
-                nodeI.setInfo(nodeJ.getInfo());
-                nodeJ.setInfo(temp);
+                swaps(nodeI, nodeJ);
                 i++;
                 j--;
             }

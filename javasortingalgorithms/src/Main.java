@@ -9,7 +9,7 @@ public class Main {
             list.insertEnd(randomValue);
         }
         list.display();
-        list.insertionSort();
+        list.heapSort();
         list.display();
     }
 }

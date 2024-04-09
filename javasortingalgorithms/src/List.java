@@ -2,9 +2,12 @@ public class List {
     Node start;
     Node end;
 
+    int elementsAmount;
+
     public List() {
         this.start = null;
         this.end = null;
+        elementsAmount = 0;
     }
 
     public Node getStart() {
@@ -31,6 +34,7 @@ public class List {
             start.setPrev(newNode);
             start = newNode;
         }
+        elementsAmount++;
     }
 
     public void insertEnd(int info) {
@@ -41,6 +45,7 @@ public class List {
             end.setNext(newNode);
             end = newNode;
         }
+        elementsAmount++;
     }
 
     public void display() {
@@ -53,6 +58,21 @@ public class List {
                 print.append(" - ");
         }
         System.out.println(print);
+    }
+
+    private Node getNode(int pos) { // Get x node by position
+        Node aux = start;
+        for (int i = 0; i < pos; i++) {
+            aux = aux.getNext();
+        }
+        return aux;
+    }
+
+
+    private void swaps(Node one, Node two) {
+        int temp = one.getInfo();
+        one.setInfo(two.getInfo());
+        two.setInfo(temp);
     }
 
     public void selectionSort() {
@@ -143,6 +163,41 @@ public class List {
 
             posPointer.setInfo(auxInt);
             startSearch = startSearch.getNext();
+        }
+    }
+
+    public void heapSort() {
+        int ChildL, ChildR, parent;
+        int LS = elementsAmount; // Logical Size
+        Node nodeChildL;
+        Node nodeChildR;
+        Node nodeParent;
+        Node largestChild;
+        Node auxEnd = end;
+
+        while (LS > 1) {
+            for (parent = LS / 2 - 1; parent >= 0; parent--) {
+                // Positions
+                ChildL = parent * 2 + 1;
+                ChildR = parent * 2 + 2;
+
+                // Nodes
+                nodeChildL = getNode(ChildL);
+                nodeChildR = getNode(ChildR);
+                nodeParent = getNode(parent);
+
+                if (ChildR < LS && nodeChildR.getInfo() > nodeChildL.getInfo()) {
+                    largestChild = nodeChildR;
+                } else {
+                    largestChild = nodeChildL;
+                }
+                if (nodeParent.getInfo() < largestChild.getInfo()) {
+                    swaps(nodeParent, largestChild);
+                }
+            }
+            swaps(start, auxEnd);
+            auxEnd = auxEnd.getPrev();
+            LS--;
         }
     }
 }

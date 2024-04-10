@@ -74,7 +74,7 @@ public class List {
         j.setInfo(temp);
     }
 
-    public int binnarySearch(int key, int LS) {
+    public int binarySearch(int key, int LS) {
         int start = 0, end = LS - 1, middle = LS / 2;
 
         Node aux = getNode(middle);
@@ -127,7 +127,7 @@ public class List {
         int aux, pos;
         for (int i = 1; i < logicalSize; i++) {
             aux = getNode(i).getInfo();
-            pos = binnarySearch(aux, i);
+            pos = binarySearch(aux, i);
 
             for (int j = i; j > pos; j--)
                 getNode(j).setInfo(getNode(j - 1).getInfo());
@@ -347,15 +347,15 @@ public class List {
 
     public void gnomeSort() {
         int aux;
-        for (int i = 0; i < logicalSize - 1; i++) {
+        for (int i = 0; i < logicalSize - 1; i++)
             if (getNode(i).getInfo() > getNode(i).getNext().getInfo()) {
                 aux = getNode(i).getInfo();
                 getNode(i).setInfo(getNode(i).getNext().getInfo());
                 getNode(i).getNext().setInfo(aux);
                 i = -1;
                 System.out.println(aux);
+                System.out.println(i);
             }
-        }
     }
 
     public void countingSort() {
@@ -372,7 +372,7 @@ public class List {
             aux = aux.getNext();
         }
 
-        for(int i=1; i<maior; i++) // sum array
+        for(int i=1; i<maior; i++) // counting array
             vet[i] += vet[i-1];
 
         List listAux = new List();
@@ -610,5 +610,41 @@ public class List {
             }
             b = b.getNext();
         }
+    }
+
+    public void merge2(int left, int middle, int right) {
+        int len = middle - left + 1, len_aux = right - middle, i , j = 0, k = left;
+        int[] array1 = new int[len];
+        int[] array2 = new int[len_aux];
+
+        for (i = 0; i < len; i++)
+            array1[i] = getNode(left + i).getInfo();
+        for (i = 0; i < len_aux; i++)
+            array2[i] = getNode(middle + 1 + i).getInfo();
+
+        while (i < len && j < len_aux) {
+            if (array1[i] < array2[j])
+                getNode(k++).setInfo(array1[i++]);
+            else
+                getNode(k++).setInfo(array2[j++]);
+        }
+
+        while (i < len)
+            getNode(k++).setInfo(array1[i++]);
+        while (j < len_aux)
+            getNode(k++).setInfo(array2[j++]);
+    }
+
+    public void mergeS2(int left, int right) {
+        if (left < right) {
+            int middle = left + (right - left) / 2;
+            mergeS2(left, middle);
+            mergeS2(middle + 1, right);
+            merge2(left, middle, right);
+        }
+    }
+
+    public void mergeSort2() {
+        mergeS2(0, logicalSize - 1);
     }
 }

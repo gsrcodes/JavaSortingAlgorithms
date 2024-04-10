@@ -573,4 +573,42 @@ public class List {
                 timMerge(left, middle, right);
             }
     }
+
+    public void bucketSort() {
+        int largest = getLargest();
+        int nBuckets = (int) Math.sqrt(largest), pos;
+        int max = (largest-1)/nBuckets;
+        BucketList bucketList = new BucketList();
+        List listAux;
+        Node nodeAux = start;
+        Bucket b;
+
+        for(int i=0; i<nBuckets; i++)
+            bucketList.insertNewStart(i);
+
+        while(nodeAux != null) {
+            pos = (nodeAux.getInfo()-1) / (max+1);
+            listAux = bucketList.searchBucket(pos).getList();
+            listAux.insertStart(nodeAux.getInfo());
+            listAux.insertionSort();
+            nodeAux = nodeAux.getNext();
+        }
+
+        b = bucketList.getStart();
+        while(b != null)
+            b = b.getNext();
+
+        b = bucketList.getStart();
+        Node node;
+        nodeAux = start;
+        while(b != null) {
+            node = b.getList().getStart();
+            while(node != null) {
+                nodeAux.setInfo(node.getInfo());
+                nodeAux = nodeAux.getNext();
+                node = node.getNext();
+            }
+            b = b.getNext();
+        }
+    }
 }

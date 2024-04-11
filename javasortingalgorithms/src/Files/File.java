@@ -252,21 +252,17 @@ public class File {
         }
     }
 
-    public void shakeSort()
-    {
+    public void shakeSort() {
         Record reg1 = new Record();
         Record reg2 = new Record();
         int start = 0, end = filesize()-1;
-        while(start < end)
-        {
-            for (int i = start; i < end; i++)
-            {
+        while(start < end) {
+            for (int i = start; i < end; i++) {
                 seek(i);
                 reg1.read(file);
                 reg2.read(file);
                 comparasions++;
-                if (reg1.getKey() > reg2.getKey())
-                {
+                if (reg1.getKey() > reg2.getKey()) {
                     permutations += 2;
                     seek(i);
                     reg2.write(file);
@@ -275,14 +271,12 @@ public class File {
             }
             end--;
 
-            for (int i = end; i > start; i--)
-            {
+            for (int i = end; i > start; i--) {
                 seek(i-1);
                 reg2.read(file);
                 reg1.read(file);
                 comparasions++;
-                if (reg1.getKey() < reg2.getKey())
-                {
+                if (reg1.getKey() < reg2.getKey()) {
                     permutations += 2;
                     seek(i);
                     reg2.write(file);
@@ -347,8 +341,7 @@ public class File {
                     seek(j + dist);
                     record2.read(file);
                     comparasions++;
-                    if (record1.getKey() > record2.getKey())
-                    {
+                    if (record1.getKey() > record2.getKey()) {
                         permutations += 2;
                         swaps(j, j + dist);
                         k = j;
@@ -357,8 +350,7 @@ public class File {
                         seek(k - dist);
                         record2.read(file);
                         comparasions++;
-                        while (k - dist >= i && record1.getKey() < record2.getKey())
-                        {
+                        while (k - dist >= i && record1.getKey() < record2.getKey()) {
                             comparasions++;
                             permutations += 2;
                             swaps(k, k - dist);
@@ -371,5 +363,153 @@ public class File {
 
                     }
                 }
+    }
+
+    public void gnomeSort() {
+        int i = 0;
+        Record record1 = new Record();
+        Record record2 = new Record();
+
+        while (i < filesize()) {
+            seek(i - 1);
+            record2.read(file);
+            record1.read(file);
+            comparasions++;
+            if (i != 0 && record1.getKey() < record2.getKey()) {
+                permutations += 2;
+                seek(i - 1);
+                record2.read(file);
+                record1.read(file);
+
+                seek(i - 1);
+                record1.write(file);
+                record2.write(file);
+                i--;
+            }
+            else
+                i++;
+        }
+    }
+
+    public void combSort() {
+        int gap = filesize();
+        boolean troca = true;
+        Record record1 = new Record();
+        Record record2 = new Record();
+
+        while (gap != 1 || troca) {
+            gap /= 1.3;
+            if (gap < 1)
+                gap = 1;
+            troca = false;
+            for (int i = 0; i < filesize() - gap; i++) {
+                seek(i);
+                record1.read(file);
+                seek(i + gap);
+                record2.read(file);
+                comparasions++;
+                if (record1.getKey() > record2.getKey()) {
+                    swaps(i, i + gap);
+                    permutations += 2;
+                    troca = true;
+                }
+            }
+        }
+    }
+
+    public void quickSort() {
+        quickSortWithoutPivot(0, filesize() - 1);
+    }
+
+    public void quickSortWithoutPivot(int start, int end)
+    {
+        int i = start, j = end;
+        boolean flag = true;
+        Record record1 = new Record();
+        Record record2 = new Record();
+
+        while(i < j) {
+            seek(i);
+            record1.read(file);
+            seek(j);
+            record2.read(file);
+            if(flag) {
+                comparasions++;
+                while(i < j && record1.getKey() < record2.getKey()) {
+                    i++;
+                    seek(i);
+                    record1.read(file);
+                    comparasions++;
+                }
+            }
+            else {
+                comparasions++;
+                while(i < j && record2.getKey() > record1.getKey()) {
+                    j--;
+                    seek(j);
+                    record2.read(file);
+                    comparasions++;
+                }
+            }
+            permutations+=2;
+            swaps(i,j);
+            flag = !flag;
+        }
+        if(start < i-1)
+            quickSortWithoutPivot(start, i-1);
+        if(j+1 < end)
+            quickSortWithoutPivot(j+1, end);
+    }
+
+    public void quickSortWithPivot() {
+        quickSortPivot(0, filesize() - 1);
+    }
+    public void quickSortPivot(int start, int end)
+    {
+        Record record1 = new Record();
+        Record record2 = new Record();
+        Record pivot = new Record();
+        int i = start;
+        int j = end;
+        int value = (start + end) / 2;
+        seek(value);
+        pivot.read(file);
+        while (i < j)
+        {
+            seek(i);
+            record1.read(file);
+            comparasions++;
+            while (record1.getKey() < pivot.getKey())
+            {
+                i++;
+                seek(i);
+                record1.read(file);
+                comparasions++;
+            }
+            seek(j);
+            record2.read(file);
+            comparasions++;
+            while (record2.getKey() > pivot.getKey())
+            {
+                j--;
+                seek(j);
+                record2.read(file);
+                comparasions++;
+            }
+            if (i <= j)
+            {
+                seek(i);
+                record2.write(file);
+                seek(j);
+                record1.write(file);
+                permutations += 2;
+                i++;
+                j--;
+            }
+        }
+        if (start < j)
+            quickSortPivot(start, j);
+        if (i < end)
+            quickSortPivot(i, end);
     }
 }

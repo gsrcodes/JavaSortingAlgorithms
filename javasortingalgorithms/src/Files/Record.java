@@ -1,35 +1,34 @@
-package Archives;
+package Files;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class Records {
-
+public class Record {
     private int key; //4 bytes
     public final int FS = 1022;
     private char trash[] = new char[FS]; //2044 bytes
 
-    public Records(){
+    public Record(){
 
     }
 
-    public Records(int key) {
+    public Record(int key) {
         this.key = key;
         for(int i = 0; i < FS; i++)
             trash[i] = 'X';
     }
 
-    public void readArchive(RandomAccessFile archive) {
+    public void read(RandomAccessFile archive) {
         try {
             key = archive.readInt();
             for(int i = 0; i < FS; i++)
-                trash[i]=archive.readChar();
+                trash[i] = archive.readChar();
         } catch(IOException e){
 
         }
     }
 
-    public void writeArchive(RandomAccessFile archive)
+    public void write(RandomAccessFile archive)
     {
         try {
             archive.writeInt(key);
@@ -44,18 +43,15 @@ public class Records {
         return(2048);
     }
 
-    public void displayRecord()
-    {
-        System.out.print(this.key);
+    public void display() {
+        System.out.print(this.key + " - ");
     }
 
-    public int getKey()
-    {
+    public int getKey() {
         return this.key;
     }
 
-    public void setKey(int key)
-    {
+    public void setKey(int key) {
         this.key = key;
     }
 

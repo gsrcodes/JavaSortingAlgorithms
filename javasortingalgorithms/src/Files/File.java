@@ -79,6 +79,20 @@ public class File {
         System.out.println("\n");
     }
 
+    public int getLargest() {
+        int largest;
+        Record recordAux = new Record();
+        seek(0);
+        largest = recordAux.getKey();
+        for (int i = 1; i < filesize(); i++) {
+            recordAux.read(file);
+            comparasions++;
+            if (largest < recordAux.getKey())
+                largest = recordAux.getKey();
+        }
+        return largest;
+    }
+
     public void copyFile(File file) {
         Record record = new Record();
         for(int i = 0; i < file.filesize(); i++) {
@@ -511,5 +525,38 @@ public class File {
             quickSortPivot(start, j);
         if (i < end)
             quickSortPivot(i, end);
+    }
+
+    public void countSort() {
+        int largest = getLargest() + 1;
+        int array[] = new int[largest];
+        int pos;
+        Record record = new Record();
+
+        for(int i = 0; i < largest; i++)
+            array[i]=0;
+        for(int i = 0; i < filesize(); i++) {
+            seek(i);
+            record.read(file);
+            array[record.getKey()-1]++;
+        }
+        for(int i=1; i<largest; i++)
+            array[i] += array[i-1];
+
+        int array2[] = new int[filesize()];
+        for(int i=0; i<filesize(); i++) {
+            seek(i);
+            record.read(file);
+            pos = record.getKey();
+            array2[array[pos-1]-1] = pos;
+            array[pos-1]--;
+        }
+
+        for(int i=0; i<filesize(); i++) {
+            record.setKey(array2[i]);
+            seek(i);
+            record.write(file);
+            permutations++;
+        }
     }
 }

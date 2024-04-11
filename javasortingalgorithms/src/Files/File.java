@@ -15,6 +15,10 @@ public class File {
         } catch (IOException e){}
     }
 
+    public RandomAccessFile getFile(){
+        return file;
+    }
+
     public void seek(int pos) {
         try {
             file.seek(pos * Record.length());
@@ -43,6 +47,19 @@ public class File {
         } catch (IOException exc){}
     }
 
+    public void swaps(int i, int j) {
+        Record record1 = new Record();
+        Record record2 = new Record();
+        seek(i);
+        record1.read(file);
+        seek(j);
+        record2.read(file);
+        seek(i);
+        record2.write(file);
+        seek(j);
+        record1.write(file);
+    }
+
     public void insertStart(int key) {
         Record novo = new Record(key);
         seek(filesize());
@@ -60,6 +77,16 @@ public class File {
             i++;
         }
         System.out.println("\n");
+    }
+
+    public void copyFile(File file) {
+        Record record = new Record();
+        for(int i = 0; i < file.filesize(); i++) {
+            file.seek(i);
+            record.read(file.getFile());
+            seek(i);
+            record.write(this.file);
+        }
     }
 
     public void createSortedFile(int len) {
@@ -87,22 +114,20 @@ public class File {
         truncate(i);
     }
 
-    public void createRandomFile(int tam)
-    {
+    public void createRandomFile(int len) {
         Record recordAux;
-        int i =0;
+        int i = 0;
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for(i=0; i<tam; i++)
+        for(i=0; i < len; i++)
             list.add(i+1);
 
         Collections.shuffle(list);
-        for(i=0; i<tam; i++)
-        {
+        for(i=0; i < len; i++) {
             recordAux = new Record(list.get(i));
             seek(i);
             recordAux.write(file);
         }
-        truncate(tam);
+        truncate(len);
     }
 
     private int binarySearch(Record record, int LS) {
@@ -267,5 +292,84 @@ public class File {
             }
             start++;
         }
+    }
+
+    public void heapSort() {
+        Record record1 = new Record();
+        Record record2 = new Record();
+        int parent, CL, CR, largest, LS;
+        LS = filesize();
+        while (LS > 1) {
+            parent = LS / 2 - 1;
+            while (parent >= 0) {
+                CL = 2 * parent + 1;
+                CR = CL + 1;
+                largest = CL;
+
+                seek(CL);
+                record1.read(file);
+                record2.read(file);
+
+                comparasions++;
+                if (CR < LS && record1.getKey() < record2.getKey())
+                    largest = CR;
+
+                seek(largest);
+                record1.read(file);
+                seek(parent);
+                record2.read(file);
+
+                comparasions++;
+                if (record1.getKey() > record2.getKey()) {
+                    seek(parent);
+                    record1.write(file);
+                    seek(largest);
+                    record2.write(file);
+                    permutations += 2;
+                }
+                parent--;
+            }
+            permutations += 2;
+            swaps(0, LS - 1);
+            LS--;
+        }
+    }
+
+    public void shellSort() {
+        Record record1 = new Record();
+        Record record2 = new Record();
+        int i, j, k, dist;
+        for (dist = 4; dist > 0; dist /= 2)
+            for (i = 0; i < dist; i++)
+                for (j = i; j + dist < filesize(); j += dist) {
+                    seek(j);
+                    record1.read(file);
+                    seek(j + dist);
+                    record2.read(file);
+                    comparasions++;
+                    if (record1.getKey() > record2.getKey())
+                    {
+                        permutations += 2;
+                        swaps(j, j + dist);
+                        k = j;
+                        seek(k);
+                        record1.read(file);
+                        seek(k - dist);
+                        record2.read(file);
+                        comparasions++;
+                        while (k - dist >= i && record1.getKey() < record2.getKey())
+                        {
+                            comparasions++;
+                            permutations += 2;
+                            swaps(k, k - dist);
+                            k -= dist;
+                            seek(k);
+                            record1.read(file);
+                            seek(k - dist);
+                            record2.read(file);
+                        }
+
+                    }
+                }
     }
 }

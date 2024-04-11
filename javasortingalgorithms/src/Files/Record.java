@@ -18,22 +18,22 @@ public class Record {
             trash[i] = 'X';
     }
 
-    public void read(RandomAccessFile archive) {
+    public void read(RandomAccessFile file) {
         try {
-            key = archive.readInt();
+            key = file.readInt();
             for(int i = 0; i < FS; i++)
-                trash[i] = archive.readChar();
+                trash[i] = file.readChar();
         } catch(IOException e){
 
         }
     }
 
-    public void write(RandomAccessFile archive)
+    public void write(RandomAccessFile file)
     {
         try {
-            archive.writeInt(key);
+            file.writeInt(key);
             for(int i = 0 ; i < FS ; i++)
-                archive.writeChar(trash[i]);
+                file.writeChar(trash[i]);
         } catch(IOException e){
 
         }

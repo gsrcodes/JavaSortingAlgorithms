@@ -1,3 +1,5 @@
+package Lists;
+
 public class List {
     Node start;
     Node end;
@@ -622,6 +624,7 @@ public class List {
         for (i = 0; i < len_aux; i++)
             array2[i] = getNode(middle + 1 + i).getInfo();
 
+        i = 0;
         while (i < len && j < len_aux) {
             if (array1[i] < array2[j])
                 getNode(k++).setInfo(array1[i++]);

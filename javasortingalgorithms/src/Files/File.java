@@ -9,7 +9,31 @@ import java.util.*;
 public class File {
     private String fileName;
     private RandomAccessFile file;
+
     int comparisons, permutations;
+
+    public void initComparisons() {
+        comparisons = 0;
+    }
+    public void initPermatitons(){
+        permutations = 0;
+    }
+
+    public int getComparisons() {
+        return comparisons;
+    }
+
+    public void setComparisons(int comparisons) {
+        this.comparisons = comparisons;
+    }
+
+    public int getPermutations() {
+        return permutations;
+    }
+
+    public void setPermutations(int permutations) {
+        this.permutations = permutations;
+    }
 
     public File(String archiveName) {
         try {
@@ -480,8 +504,7 @@ public class File {
     public void quickSortWithPivot() {
         quickSortPivot(0, filesize() - 1);
     }
-    public void quickSortPivot(int start, int end)
-    {
+    public void quickSortPivot(int start, int end) {
         Record record1 = new Record();
         Record record2 = new Record();
         Record pivot = new Record();
@@ -490,13 +513,11 @@ public class File {
         int value = (start + end) / 2;
         seek(value);
         pivot.read(file);
-        while (i < j)
-        {
+        while (i < j) {
             seek(i);
             record1.read(file);
             comparisons++;
-            while (record1.getKey() < pivot.getKey())
-            {
+            while (record1.getKey() < pivot.getKey()) {
                 i++;
                 seek(i);
                 record1.read(file);
@@ -505,15 +526,13 @@ public class File {
             seek(j);
             record2.read(file);
             comparisons++;
-            while (record2.getKey() > pivot.getKey())
-            {
+            while (record2.getKey() > pivot.getKey()) {
                 j--;
                 seek(j);
                 record2.read(file);
                 comparisons++;
             }
-            if (i <= j)
-            {
+            if (i <= j) {
                 seek(i);
                 record2.write(file);
                 seek(j);
@@ -604,7 +623,7 @@ public class File {
         }
     }
 
-    public void merge2() {
+    public void mergeSort2() {
         int mid, left, right;
         Lists.Stack stack1 = new Lists.Stack();
         Lists.Stack stack2 = new Stack();
@@ -631,7 +650,7 @@ public class File {
             left = stack2.pop();
             mid = (left + right) / 2;
 
-            this.fusion(auxFile, left, mid, mid + 1, right);
+            fusion(auxFile, left, mid, mid + 1, right);
         }
         auxFile.truncate(0);
     }
@@ -679,7 +698,6 @@ public class File {
             record2.write(aux.getFile());
         }
 
-
         aux.seek(0);
         for (i = 0; i < k; i++) {
             seek(i + start1);
@@ -688,5 +706,51 @@ public class File {
             record1.write(file);
         }
         aux.truncate(0);
+    }
+
+    public void timSort_insertionSort(int left, int right) {
+        int j;
+        Record record1 = new Record();
+        Record record2 = new Record();
+
+        for (int i = left; i <= right; i++) {
+            j = i;
+            seek(i);
+            record1.read(file);
+            seek(j - 1);
+            record2.read(file);
+
+            comparisons++;
+            while (j > left && record1.getKey() < record2.getKey()) {
+                seek(j);
+                record2.write(file);
+                permutations++;
+                j--;
+                seek(j - 1);
+                record2.read(file);
+                comparisons++;
+            }
+            seek(j);
+            record1.write(file);
+            permutations++;
+        }
+    }
+
+
+    public void timSort() {
+        int size = filesize() - 1;
+        int timSize = 32;
+        File auxFile = new File("timSortAuxFile.dat");
+
+        for (int i = 0; i <= size; i += timSize)
+            timSort_insertionSort(i, Math.min((i + 31), size));
+
+        for (int range = timSize; range <= size; range = 2 * range) {
+            for (int left = 0; left <= size; left += 2 * range) {
+                int middle = left + range - 1;
+                int right = Math.min((left + 2 * range - 1), size);
+                fusion(auxFile, left, middle, middle + 1, right);
+            }
+        }
     }
 }

@@ -10,13 +10,13 @@ public class File {
     private String fileName;
     private RandomAccessFile file;
 
-    int comparisons, permutations;
+    int comparisons, movements;
 
     public void initComparisons() {
         comparisons = 0;
     }
     public void initPermatitons(){
-        permutations = 0;
+        movements = 0;
     }
 
     public int getComparisons() {
@@ -27,12 +27,12 @@ public class File {
         this.comparisons = comparisons;
     }
 
-    public int getPermutations() {
-        return permutations;
+    public int getMovements() {
+        return movements;
     }
 
-    public void setPermutations(int permutations) {
-        this.permutations = permutations;
+    public void setMovements(int movements) {
+        this.movements = movements;
     }
 
     public File(String archiveName) {
@@ -210,14 +210,15 @@ public class File {
             while (pos > 0 && record1.getKey() < record2.getKey()) {
                 seek(pos);
                 record2.write(file);
-                permutations++;
+                movements++;
                 seek(--pos - 1);
                 record2.read(file);
                 comparisons++;
             }
+            
             seek(pos);
             record1.write(file);
-            permutations++;
+            movements++;
         }
     }
 
@@ -234,7 +235,7 @@ public class File {
                 seek(j - 1);
                 record2.read(file);
                 record2.write(file);
-                permutations++;
+                movements++;
             }
             seek(pos);
             record1.write(file);
@@ -267,7 +268,7 @@ public class File {
 
             seek(i);
             smaller.write(file);
-            permutations += 2;
+            movements += 2;
         }
     }
 
@@ -283,7 +284,7 @@ public class File {
                 comparisons++;
                 if(record1.getKey() > record2.getKey()) {
                     seek(i);
-                    permutations += 2;
+                    movements += 2;
                     record2.write(file);
                     record1.write(file);
                 }
@@ -303,7 +304,7 @@ public class File {
                 reg2.read(file);
                 comparisons++;
                 if (reg1.getKey() > reg2.getKey()) {
-                    permutations += 2;
+                    movements += 2;
                     seek(i);
                     reg2.write(file);
                     reg1.write(file);
@@ -317,7 +318,7 @@ public class File {
                 reg1.read(file);
                 comparisons++;
                 if (reg1.getKey() < reg2.getKey()) {
-                    permutations += 2;
+                    movements += 2;
                     seek(i);
                     reg2.write(file);
                     seek(i-1);
@@ -359,11 +360,11 @@ public class File {
                     record1.write(file);
                     seek(largest);
                     record2.write(file);
-                    permutations += 2;
+                    movements += 2;
                 }
                 parent--;
             }
-            permutations += 2;
+            movements += 2;
             swaps(0, LS - 1);
             LS--;
         }
@@ -382,7 +383,7 @@ public class File {
                     record2.read(file);
                     comparisons++;
                     if (record1.getKey() > record2.getKey()) {
-                        permutations += 2;
+                        movements += 2;
                         swaps(j, j + dist);
                         k = j;
                         seek(k);
@@ -392,7 +393,7 @@ public class File {
                         comparisons++;
                         while (k - dist >= i && record1.getKey() < record2.getKey()) {
                             comparisons++;
-                            permutations += 2;
+                            movements += 2;
                             swaps(k, k - dist);
                             k -= dist;
                             seek(k);
@@ -416,7 +417,7 @@ public class File {
             record1.read(file);
             comparisons++;
             if (i != 0 && record1.getKey() < record2.getKey()) {
-                permutations += 2;
+                movements += 2;
                 seek(i - 1);
                 record2.read(file);
                 record1.read(file);
@@ -450,7 +451,7 @@ public class File {
                 comparisons++;
                 if (record1.getKey() > record2.getKey()) {
                     swaps(i, i + gap);
-                    permutations += 2;
+                    movements += 2;
                     troca = true;
                 }
             }
@@ -491,7 +492,7 @@ public class File {
                     comparisons++;
                 }
             }
-            permutations+=2;
+            movements +=2;
             swaps(i,j);
             flag = !flag;
         }
@@ -537,7 +538,7 @@ public class File {
                 record2.write(file);
                 seek(j);
                 record1.write(file);
-                permutations += 2;
+                movements += 2;
                 i++;
                 j--;
             }
@@ -577,7 +578,7 @@ public class File {
             record.setKey(array2[i]);
             seek(i);
             record.write(file);
-            permutations++;
+            movements++;
         }
     }
 
@@ -619,7 +620,7 @@ public class File {
             reg.setKey(array2[i]);
             seek(i);
             reg.write(file);
-            permutations++;
+            movements++;
         }
     }
 
@@ -701,7 +702,7 @@ public class File {
         aux.seek(0);
         for (i = 0; i < k; i++) {
             seek(i + start1);
-            permutations++;
+            movements++;
             record1.read(aux.getFile());
             record1.write(file);
         }
@@ -724,7 +725,7 @@ public class File {
             while (j > left && record1.getKey() < record2.getKey()) {
                 seek(j);
                 record2.write(file);
-                permutations++;
+                movements++;
                 j--;
                 seek(j - 1);
                 record2.read(file);
@@ -732,7 +733,7 @@ public class File {
             }
             seek(j);
             record1.write(file);
-            permutations++;
+            movements++;
         }
     }
 

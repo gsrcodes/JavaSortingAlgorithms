@@ -1,13 +1,12 @@
 package Files;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class MakeTable {
-    int len = 50;
+    int len = 10;
     long timeStart, timeFinished, timeStartAll, timeFinishedAll;
-    int comparisons, permutations;
+    int comparisons, movements;
     File reverseFile, sortedFile, randomFile;
     File fileCopy;
     RandomAccessFile table;
@@ -74,9 +73,9 @@ public class MakeTable {
         sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
+        movements = fileCopy.getMovements();
         long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(algorithmName + ";" + comparisons + "; ;" + permutations + "; ;" + duration);
+        table.writeBytes(algorithmName + ";" + comparisons + "; ;" + movements + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
@@ -86,9 +85,9 @@ public class MakeTable {
         sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
+        movements = fileCopy.getMovements();
         duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
+        table.writeBytes(";" + comparisons + "; ;" + movements +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
@@ -98,9 +97,9 @@ public class MakeTable {
         sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
+        movements = fileCopy.getMovements();
         duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        table.writeBytes(";" + comparisons + "; ;" + movements +"; ;" + duration + "\n");
     }
 
     private void insertionSort() throws IOException {
@@ -119,7 +118,7 @@ public class MakeTable {
         runSortingAlgorithm("Bubble Sort", fileCopy::bubbleSort);
     }
     private void shakeSort() throws IOException {
-        runSortingAlgorithm("Bubble Sort", fileCopy::shakeSort);
+        runSortingAlgorithm("Shake Sort", fileCopy::shakeSort);
     }
 
     private void shellSort() throws IOException {

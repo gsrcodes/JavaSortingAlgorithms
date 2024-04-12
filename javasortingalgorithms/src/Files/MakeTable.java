@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class MakeTable {
-    int len = 1024;
+    int len = 50;
     long timeStart, timeFinished, timeStartAll, timeFinishedAll;
     int comparisons, permutations;
     File reverseFile, sortedFile, randomFile;
     File fileCopy;
     RandomAccessFile table;
+
+
 
     void printHeader() throws IOException {
         table.writeBytes("Metodos de Ordenacao;Arquivo Ordenado; ; ; ; ; Arquivo em Ordem Reversa; ; ; ; ; Arquivo Randomico\n" +
@@ -23,7 +25,7 @@ public class MakeTable {
         initFiles();
         printHeader();
         insertionSort();
-        binaryInsertinoSort();
+        binaryInsertionSort();
         selectionSort();
         bubbleSort();
         shakeSort();
@@ -38,7 +40,7 @@ public class MakeTable {
         gnomeSort();
         timSort();
         timeFinishedAll = System.currentTimeMillis();
-        long duration = (timeFinished - timeStart) / 1000;
+        long duration = (timeFinishedAll - timeStartAll) / 1000;
         System.out.println("All sorting algorithms finished in " + duration + "s");
     }
     public void initFiles() throws IOException {
@@ -63,25 +65,25 @@ public class MakeTable {
         reverseFile.createReverseFile(len);
     }
 
-    private void insertionSort() throws IOException {
+    private void runSortingAlgorithm(String algorithmName, Runnable sortingAlgorithm) throws IOException {
         // Sorted File
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
         timeStart = System.currentTimeMillis();
-        fileCopy.insertionSort();
+        sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
         long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Insertion Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
+        table.writeBytes(algorithmName + ";" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
         timeStart = System.currentTimeMillis();
-        fileCopy.insertionSort();
+        sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
@@ -93,7 +95,7 @@ public class MakeTable {
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
         timeStart = System.currentTimeMillis();
-        fileCopy.insertionSort();
+        sortingAlgorithm.run();
         timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
@@ -101,536 +103,62 @@ public class MakeTable {
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
-    private void binaryInsertinoSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.binaryInsertionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Binary Insertion Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
+    private void insertionSort() throws IOException {
+        runSortingAlgorithm("Insertion Sort", fileCopy::insertionSort);
+    }
 
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.binaryInsertionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.binaryInsertionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
-
+    private void binaryInsertionSort() throws IOException {
+        runSortingAlgorithm("Binary Insertion Sort", fileCopy::binaryInsertionSort);
     }
 
     private void selectionSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.selectionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Selection Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.selectionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.selectionSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Selection Sort", fileCopy::selectionSort);
     }
 
     private void bubbleSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.bubbleSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Bubble Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.bubbleSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.bubbleSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Bubble Sort", fileCopy::bubbleSort);
     }
-
     private void shakeSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shakeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Shake Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shakeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shakeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Bubble Sort", fileCopy::shakeSort);
     }
 
     private void shellSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shellSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Shell Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shellSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.shellSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Shell Sort", fileCopy::shellSort);
     }
 
     private void heapSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.heapSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Heap Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.heapSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.heapSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Heap Sort", fileCopy::heapSort);
     }
 
     private void quickSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Quick Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Quick Sort", fileCopy::quickSort);
     }
 
     private void quickSortWithPivot() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSortWithPivot();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Quick Sort W/ Pivot;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSortWithPivot();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.quickSortWithPivot();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Quick Sort with Pivot", fileCopy::quickSortWithPivot);
     }
 
     private void mergeSort2() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.mergeSort2();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Merge Sort 2;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.mergeSort2();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.mergeSort2();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Merge 2", fileCopy::mergeSort2);
     }
 
     private void countingSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.countingSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Counting Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.countingSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.countingSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Counting Sort", fileCopy::countingSort);
     }
 
     private void radixSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.radixSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Radix Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.radixSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.radixSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Radix Sort", fileCopy::radixSort);
     }
 
     private void combSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.combSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Comb Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.combSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.combSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Comb Sort", fileCopy::combSort);
     }
 
     private void gnomeSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.gnomeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Gnome Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.gnomeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.gnomeSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Gnome Sort", fileCopy::gnomeSort);
     }
 
     private void timSort() throws IOException {
-        // Sorted File
-        fileCopy.copyFile(sortedFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.timSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes("Tim Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
-
-        // Reverse File
-        fileCopy.copyFile(reverseFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.timSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
-
-        // Random File
-        fileCopy.copyFile(randomFile);
-        fileCopy.initComparisons();
-        fileCopy.initPermatitons();
-        timeStart = System.currentTimeMillis();
-        fileCopy.timSort();
-        timeFinished = System.currentTimeMillis();
-        comparisons = fileCopy.getComparisons();
-        permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 1000;
-        table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+        runSortingAlgorithm("Tim Sort", fileCopy::timSort);
     }
 }

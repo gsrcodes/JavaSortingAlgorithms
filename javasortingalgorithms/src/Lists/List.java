@@ -54,7 +54,7 @@ public class List {
         Node aux = start;
         StringBuilder print = new StringBuilder();
         while(aux != null){
-            print.append(aux.getInfo());
+            print.append(aux.getKey());
             aux = aux.getNext();
             if(aux != null)
                 print.append(" - ");
@@ -71,19 +71,19 @@ public class List {
 
 
     private void swaps(Node i, Node j) {
-        int temp = i.getInfo();
-        i.setInfo(j.getInfo());
-        j.setInfo(temp);
+        int temp = i.getKey();
+        i.setKey(j.getKey());
+        j.setKey(temp);
     }
 
     public int binarySearch(int key, int LS) {
         int start = 0, end = LS - 1, middle = LS / 2;
 
         Node aux = getNode(middle);
-        while (start < end && aux.getInfo() != key) {
-            if (aux.getInfo() == key)
+        while (start < end && aux.getKey() != key) {
+            if (aux.getKey() == key)
                 return middle;
-            else if (key > aux.getInfo())
+            else if (key > aux.getKey())
                 start = middle + 1;
                 else
                 end = middle - 1;
@@ -91,7 +91,7 @@ public class List {
             middle = (start + end) / 2;
             aux = getNode(middle);
         }
-        if (key > aux.getInfo())
+        if (key > aux.getKey())
             return middle + 1;
         return middle;
     }
@@ -99,8 +99,8 @@ public class List {
     public int getLargest() {
         int i = 0, largest = 0;
         while (i < logicalSize) {
-            if (getNode(i).getInfo() > largest) {
-                largest = getNode(i).getInfo();
+            if (getNode(i).getKey() > largest) {
+                largest = getNode(i).getKey();
             }
             i++;
         }
@@ -114,13 +114,13 @@ public class List {
         Node i, pos;
         i = start.getNext();
         while (i != null) {
-            aux = i.getInfo();
+            aux = i.getKey();
             pos = i;
-            while (pos != start && aux < pos.getPrev().getInfo()) {
-                pos.setInfo(pos.getPrev().getInfo());
+            while (pos != start && aux < pos.getPrev().getKey()) {
+                pos.setKey(pos.getPrev().getKey());
                 pos = pos.getPrev();
             }
-            pos.setInfo(aux);
+            pos.setKey(aux);
             i = i.getNext();
         }
     }
@@ -128,13 +128,13 @@ public class List {
     public void binaryInsertionSort() {
         int aux, pos;
         for (int i = 1; i < logicalSize; i++) {
-            aux = getNode(i).getInfo();
+            aux = getNode(i).getKey();
             pos = binarySearch(aux, i);
 
             for (int j = i; j > pos; j--)
-                getNode(j).setInfo(getNode(j - 1).getInfo());
+                getNode(j).setKey(getNode(j - 1).getKey());
 
-            getNode(pos).setInfo(aux);
+            getNode(pos).setKey(aux);
         }
     }
 
@@ -146,16 +146,16 @@ public class List {
             posSmaller = current;
 
             while(compare != null) {
-                if (compare.getInfo() < posSmaller.getInfo()) {
+                if (compare.getKey() < posSmaller.getKey()) {
                     posSmaller = compare;
                 }
 
                 compare = compare.getNext();
             }
 
-            aux = current.getInfo();
-            current.setInfo(posSmaller.getInfo());
-            posSmaller.setInfo(aux);
+            aux = current.getKey();
+            current.setKey(posSmaller.getKey());
+            posSmaller.setKey(aux);
             current = current.getNext();
         }
     }
@@ -168,11 +168,11 @@ public class List {
             current = start;
             swap = false;
             while(current != end) {
-                if(current.getInfo() > current.getNext().getInfo()) {
+                if(current.getKey() > current.getNext().getKey()) {
                     swap = true;
-                    auxInt = current.getNext().getInfo();
-                    current.getNext().setInfo(current.getInfo());
-                    current.setInfo(auxInt);
+                    auxInt = current.getNext().getKey();
+                    current.getNext().setKey(current.getKey());
+                    current.setKey(auxInt);
                 }
                 current = current.getNext();
             }
@@ -188,11 +188,11 @@ public class List {
             current = start;
             swap = false;
             while(current != end) {
-                if(current.getInfo() > current.getNext().getInfo()) {
+                if(current.getKey() > current.getNext().getKey()) {
                     swap = true;
-                    auxInt = current.getNext().getInfo();
-                    current.getNext().setInfo(current.getInfo());
-                    current.setInfo(auxInt);
+                    auxInt = current.getNext().getKey();
+                    current.getNext().setKey(current.getKey());
+                    current.setKey(auxInt);
                 }
                 current = current.getNext();
             }
@@ -200,11 +200,11 @@ public class List {
 
             current = end;
             while(current != start) {
-                if(current.getInfo() < current.getPrev().getInfo()) {
+                if(current.getKey() < current.getPrev().getKey()) {
                     swap = true;
-                    auxInt = current.getPrev().getInfo();
-                    current.getPrev().setInfo(current.getInfo());
-                    current.setInfo(auxInt);
+                    auxInt = current.getPrev().getKey();
+                    current.getPrev().setKey(current.getKey());
+                    current.setKey(auxInt);
                 }
                 current = current.getPrev();
             }
@@ -217,14 +217,14 @@ public class List {
         int auxInt;
 
         while(startSearch != null) {
-            auxInt = startSearch.getInfo();
+            auxInt = startSearch.getKey();
             posPointer = startSearch;
-            while(posPointer != this.start && auxInt < posPointer.getPrev().getInfo()){
-                posPointer.setInfo(posPointer.getPrev().getInfo());
+            while(posPointer != this.start && auxInt < posPointer.getPrev().getKey()){
+                posPointer.setKey(posPointer.getPrev().getKey());
                 posPointer = posPointer.getPrev();
             }
 
-            posPointer.setInfo(auxInt);
+            posPointer.setKey(auxInt);
             startSearch = startSearch.getNext();
         }
     }
@@ -250,12 +250,12 @@ public class List {
                 nodeParent = getNode(parent);
 
                 // get the largest child
-                if (ChildR < LS && nodeChildR.getInfo() > nodeChildL.getInfo())
+                if (ChildR < LS && nodeChildR.getKey() > nodeChildL.getKey())
                     largestChild = nodeChildR;
                 else
                     largestChild = nodeChildL;
 
-                if (nodeParent.getInfo() < largestChild.getInfo())
+                if (nodeParent.getKey() < largestChild.getKey())
                     swaps(nodeParent, largestChild);
             }
             swaps(start, auxEnd);
@@ -267,13 +267,13 @@ public class List {
     public void shellSort() {
         for (int gap = logicalSize / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
             for (int i = gap; i < logicalSize; i++) {
-                int current = getNode(i).getInfo();
+                int current = getNode(i).getKey();
                 int j = i;
-                while (j >= gap && getNode(j - gap).getInfo() > current) {
-                    getNode(j).setInfo(getNode(j - gap).getInfo());
+                while (j >= gap && getNode(j - gap).getKey() > current) {
+                    getNode(j).setKey(getNode(j - gap).getKey());
                     j -= gap;
                 }
-                getNode(j).setInfo(current);
+                getNode(j).setKey(current);
             }
     }
 
@@ -283,16 +283,16 @@ public class List {
     private void quickWoutP(Node start, Node end) {
         Node i = start, j = end;
         while(i != null && i != j) {
-            while(i !=j && i.getInfo() <= j.getInfo())
+            while(i !=j && i.getKey() <= j.getKey())
                 i = i.getNext();
-            if(j.getInfo() != i.getInfo()) {
+            if(j.getKey() != i.getKey()) {
                 swaps(i, j);
                 j = j.getPrev();
             }
 
-            while(i != j && j.getInfo() >= i.getInfo())
+            while(i != j && j.getKey() >= i.getKey())
                 j = j.getPrev();
-            if(j.getInfo() != i.getInfo()) {
+            if(j.getKey() != i.getKey()) {
                 swaps(i, j);
                 i = i.getNext();
             }
@@ -311,16 +311,16 @@ public class List {
     private void quickWithP(int start, int end) {
         int i = start, j = end;
         Node nodeI, nodeJ;
-        int pivot = getNode((i + j)/2).getInfo();
+        int pivot = getNode((i + j)/2).getKey();
         while(i <= j) {
             nodeI = getNode(i);
-            while(nodeI.getInfo() < pivot) {
+            while(nodeI.getKey() < pivot) {
                 i++;
                 nodeI = nodeI.getNext();
             }
 
             nodeJ = getNode(j);
-            while(nodeJ.getInfo() > pivot) {
+            while(nodeJ.getKey() > pivot) {
                 j--;
                 nodeJ = nodeJ.getPrev();
             }
@@ -343,17 +343,17 @@ public class List {
         for (int gap = logicalSize; gap >= 1; gap = (int) (gap / 1.3))
             for (int i = 0; i < logicalSize; i++)
                 if (i + gap < logicalSize)
-                    if (getNode(i).getInfo() > getNode(i + gap).getInfo())
+                    if (getNode(i).getKey() > getNode(i + gap).getKey())
                         swaps(getNode(i), getNode(i + gap));
     }
 
     public void gnomeSort() {
         int aux;
         for (int i = 0; i < logicalSize - 1; i++)
-            if (getNode(i).getInfo() > getNode(i).getNext().getInfo()) {
-                aux = getNode(i).getInfo();
-                getNode(i).setInfo(getNode(i).getNext().getInfo());
-                getNode(i).getNext().setInfo(aux);
+            if (getNode(i).getKey() > getNode(i).getNext().getKey()) {
+                aux = getNode(i).getKey();
+                getNode(i).setKey(getNode(i).getNext().getKey());
+                getNode(i).getNext().setKey(aux);
                 i = -1;
                 System.out.println(aux);
                 System.out.println(i);
@@ -370,7 +370,7 @@ public class List {
 
         Node aux = start;
         while(aux != null) {
-            vet[aux.getInfo()-1]++; // frequency array
+            vet[aux.getKey()-1]++; // frequency array
             aux = aux.getNext();
         }
 
@@ -386,19 +386,19 @@ public class List {
         while(aux!= null) {
             nodeAux = listAux.getStart();
             int i=0;
-            while(nodeAux != null && i < vet[aux.getInfo()-1]-1) {
+            while(nodeAux != null && i < vet[aux.getKey()-1]-1) {
                 i++;
                 nodeAux = nodeAux.getNext();
             }
-            vet[aux.getInfo()-1]--;
-            nodeAux.setInfo(aux.getInfo());
+            vet[aux.getKey()-1]--;
+            nodeAux.setKey(aux.getKey());
             aux = aux.getNext();
         }
 
         aux = start;
         nodeAux = listAux.getStart();
         while(aux != null && nodeAux != null) {
-            aux.setInfo(nodeAux.getInfo());
+            aux.setKey(nodeAux.getKey());
             aux = aux.getNext();
             nodeAux = nodeAux.getNext();
         }
@@ -409,11 +409,11 @@ public class List {
         Node auxMiddle = getNode(len/2);
 
         while(auxStart != auxMiddle) {
-            part1.insertEnd(auxStart.getInfo());
+            part1.insertEnd(auxStart.getKey());
             auxStart = auxStart.getNext();
         }
         while(auxMiddle != null) {
-            part2.insertEnd(auxMiddle.getInfo());
+            part2.insertEnd(auxMiddle.getKey());
             auxMiddle = auxMiddle.getNext();
         }
     }
@@ -423,13 +423,13 @@ public class List {
         int auxSeq = seq, startAuxPos=0, nodeIPos=0, nodeJPos=0;
         while(startAuxPos < len) {
             while(nodeIPos < seq && nodeJPos < seq) {
-                if(nodeI.getInfo() < nodeJ.getInfo()) {
-                    startAux.setInfo(nodeI.getInfo());
+                if(nodeI.getKey() < nodeJ.getKey()) {
+                    startAux.setKey(nodeI.getKey());
                     nodeI = nodeI.getNext();
                     nodeIPos++;
                 }
                 else {
-                    startAux.setInfo(nodeJ.getInfo());
+                    startAux.setKey(nodeJ.getKey());
                     nodeJ = nodeJ.getNext();
                     nodeJPos++;
                 }
@@ -437,14 +437,14 @@ public class List {
                 startAuxPos++;
             }
             while(nodeIPos < seq) {
-                startAux.setInfo(nodeI.getInfo());
+                startAux.setKey(nodeI.getKey());
                 startAux = startAux.getNext();
                 startAuxPos++;
                 nodeI = nodeI.getNext();
                 nodeIPos++;
             }
             while(nodeJPos < seq) {
-                startAux.setInfo(nodeJ.getInfo());
+                startAux.setKey(nodeJ.getKey());
                 startAux = startAux.getNext();
                 startAuxPos++;
                 nodeJ = nodeJ.getNext();
@@ -480,7 +480,7 @@ public class List {
 
         Node nodeAux = start;
         for(i = 0; i < logicalSize; i++) {
-            vet[(nodeAux.getInfo()/v)%10]++;
+            vet[(nodeAux.getKey()/v)%10]++;
             nodeAux = nodeAux.getNext();
         }
 
@@ -490,15 +490,15 @@ public class List {
         Node auxEnd = end;
         for(i = logicalSize; i > 0; i--)
         {
-            pos = vet[(auxEnd.getInfo()/v) %10]-1;
+            pos = vet[(auxEnd.getKey()/v) %10]-1;
             j = 0;
             nodeAux = listAux.getStart();
             while(nodeAux != null && j < pos) {
                 nodeAux = nodeAux.getNext();
                 j++;
             }
-            nodeAux.setInfo(auxEnd.getInfo());
-            vet[(auxEnd.getInfo()/v)%10]--;
+            nodeAux.setKey(auxEnd.getKey());
+            vet[(auxEnd.getKey()/v)%10]--;
             auxEnd = auxEnd.getPrev();
         }
 
@@ -506,7 +506,7 @@ public class List {
         nodeAux = listAux.getStart();
         while (startAux != null && nodeAux != null)
         {
-            startAux.setInfo(nodeAux.getInfo());
+            startAux.setKey(nodeAux.getKey());
             startAux = startAux.getNext();
             nodeAux = nodeAux.getNext();
         }
@@ -515,13 +515,13 @@ public class List {
     private void timInsertionSort(int left, int right) {
         int temp, j;
         for (int i = left + 1; i <= right; i++) {
-            temp = getNode(i).getInfo();
+            temp = getNode(i).getKey();
             j = i - 1;
-            while (getNode(j).getInfo() > temp && j >= left) {
-                getNode(j + 1).setInfo(getNode(j).getInfo());
+            while (getNode(j).getKey() > temp && j >= left) {
+                getNode(j + 1).setKey(getNode(j).getKey());
                 j--;
             }
-            getNode(j + 1).setInfo(temp);
+            getNode(j + 1).setKey(temp);
         }
     }
 
@@ -530,30 +530,30 @@ public class List {
         int[] leftArray = new int[len1];
         int[] rightArray = new int[len2];
         for (int x = 0; x < len1; x++)
-            leftArray[x] = getNode(left + x).getInfo();
+            leftArray[x] = getNode(left + x).getKey();
         for (int x = 0; x < len2; x++)
-            rightArray[x] = getNode(middle + 1 + x).getInfo();
+            rightArray[x] = getNode(middle + 1 + x).getKey();
 
         while (i < len1 && j < len2) {
             if (leftArray[i] <= rightArray[j]) {
-                getNode(k).setInfo(leftArray[i]);
+                getNode(k).setKey(leftArray[i]);
                 i++;
             }
             else {
-                getNode(k).setInfo(rightArray[j]);
+                getNode(k).setKey(rightArray[j]);
                 j++;
             }
             k++;
         }
 
         while (i < len1) {
-            getNode(k).setInfo(leftArray[i]);
+            getNode(k).setKey(leftArray[i]);
             k++;
             i++;
         }
 
         while (j < len2) {
-            getNode(k).setInfo(rightArray[j]);
+            getNode(k).setKey(rightArray[j]);
             k++;
             j++;
         }
@@ -589,16 +589,12 @@ public class List {
             bucketList.insertNewStart(i);
 
         while(nodeAux != null) {
-            pos = (nodeAux.getInfo()-1) / (max+1);
+            pos = (nodeAux.getKey()-1) / (max+1);
             listAux = bucketList.searchBucket(pos).getList();
-            listAux.insertStart(nodeAux.getInfo());
+            listAux.insertStart(nodeAux.getKey());
             listAux.insertionSort();
             nodeAux = nodeAux.getNext();
         }
-
-        b = bucketList.getStart();
-        while(b != null)
-            b = b.getNext();
 
         b = bucketList.getStart();
         Node node;
@@ -606,7 +602,7 @@ public class List {
         while(b != null) {
             node = b.getList().getStart();
             while(node != null) {
-                nodeAux.setInfo(node.getInfo());
+                nodeAux.setKey(node.getKey());
                 nodeAux = nodeAux.getNext();
                 node = node.getNext();
             }
@@ -620,22 +616,22 @@ public class List {
         int[] array2 = new int[len_aux];
 
         for (i = 0; i < len; i++)
-            array1[i] = getNode(left + i).getInfo();
+            array1[i] = getNode(left + i).getKey();
         for (i = 0; i < len_aux; i++)
-            array2[i] = getNode(middle + 1 + i).getInfo();
+            array2[i] = getNode(middle + 1 + i).getKey();
 
         i = 0;
         while (i < len && j < len_aux) {
             if (array1[i] < array2[j])
-                getNode(k++).setInfo(array1[i++]);
+                getNode(k++).setKey(array1[i++]);
             else
-                getNode(k++).setInfo(array2[j++]);
+                getNode(k++).setKey(array2[j++]);
         }
 
         while (i < len)
-            getNode(k++).setInfo(array1[i++]);
+            getNode(k++).setKey(array1[i++]);
         while (j < len_aux)
-            getNode(k++).setInfo(array2[j++]);
+            getNode(k++).setKey(array2[j++]);
     }
 
     public void mergeS2(int left, int right) {

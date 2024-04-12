@@ -9,7 +9,7 @@ public class Main {
         File copyRandomFile = new File("copyRandomFile.dat");
         copyRandomFile.copyFile(randomFile);
         copyRandomFile.display();
-        copyRandomFile.countSort();
+        copyRandomFile.merge2();
         copyRandomFile.display();
     }
 }

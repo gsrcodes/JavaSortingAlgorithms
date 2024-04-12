@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class Record {
-    private int key; //4 bytes
     public final int FS = 1022;
+    private int key; //4 bytes
     private char trash[] = new char[FS]; //2044 bytes
 
     public Record(){

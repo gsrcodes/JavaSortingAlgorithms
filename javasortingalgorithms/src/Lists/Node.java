@@ -3,12 +3,12 @@ package Lists;
 public class Node {
     private Node next;
     private Node prev;
-    private int info;
+    private int key;
 
-    public Node(Node next, Node prev, int info) {
+    public Node(Node next, Node prev, int key) {
         this.next = next;
         this.prev = prev;
-        this.info = info;
+        this.key = key;
     }
 
     public Node getNext() {
@@ -27,11 +27,11 @@ public class Node {
         this.prev = prev;
     }
 
-    public int getInfo() {
-        return info;
+    public int getKey() {
+        return key;
     }
 
-    public void setInfo(int info) {
-        this.info = info;
+    public void setKey(int key) {
+        this.key = key;
     }
 }

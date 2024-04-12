@@ -5,15 +5,23 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class MakeTable {
-    int len = 10;
-    long timeStart, timeFinished;
+    int len = 1024;
+    long timeStart, timeFinished, timeStartAll, timeFinishedAll;
     int comparisons, permutations;
     File reverseFile, sortedFile, randomFile;
     File fileCopy;
     RandomAccessFile table;
 
+    void printHeader() throws IOException {
+        table.writeBytes("Metodos de Ordenacao;Arquivo Ordenado; ; ; ; ; Arquivo em Ordem Reversa; ; ; ; ; Arquivo Randomico\n" +
+                ";Comp. Prog. *; Comp. Equa. #; Mov. Prog. +; Mov. Equa. -; Tempo;Comp. Prog. *; Comp. Equa. #; Mov. Prog. +; Mov. Equa. -; " +
+                "Tempo;Comp. Prog. *; Comp. Equa. #; Mov. Prog. +; Mov. Equa. -; Tempo\n");
+    }
+
     public void createTable() throws IOException {
+        timeStartAll = System.nanoTime();
         initFiles();
+        printHeader();
         insertionSort();
         binaryInsertinoSort();
         selectionSort();
@@ -29,21 +37,26 @@ public class MakeTable {
         combSort();
         gnomeSort();
         timSort();
+        timeFinishedAll = System.nanoTime();
+        long duration = (timeFinished - timeStart) / 10000;
+        System.out.println("All sorting algorithms finished in " + duration + "ms");
     }
-    public void initFiles() {
+    public void initFiles() throws IOException {
         sortedFile = new File("sortedFile.dat");
         randomFile = new File("randomFile.dat");
         reverseFile = new File("reverseFile.dat");
         fileCopy = new File("fileCopy.dat");
-        java.io.File file = new java.io.File("table.csv");
+        java.io.File tableFile = new java.io.File("table.csv");
+        if (tableFile.exists())
+            tableFile.delete();
         try {
-            table = new RandomAccessFile(file,"rw");
-        } catch(Exception e){
+            table = new RandomAccessFile(tableFile, "rw");
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createFiles() {
+    public void createFiles() throws IOException {
         initFiles();
         sortedFile.createSortedFile(len);
         randomFile.createRandomFile(len);
@@ -51,9 +64,6 @@ public class MakeTable {
     }
 
     private void insertionSort() throws IOException {
-        table.readLine(); // line 1 from table
-        table.readLine(); // line 2 from table
-
         // Sorted File
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
@@ -75,7 +85,7 @@ public class MakeTable {
         timeFinished = System.nanoTime();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 100000000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File

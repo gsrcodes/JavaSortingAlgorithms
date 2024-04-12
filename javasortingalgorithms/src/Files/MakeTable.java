@@ -19,7 +19,7 @@ public class MakeTable {
     }
 
     public void createTable() throws IOException {
-        timeStartAll = System.nanoTime();
+        timeStartAll = System.currentTimeMillis();
         initFiles();
         printHeader();
         insertionSort();
@@ -37,9 +37,9 @@ public class MakeTable {
         combSort();
         gnomeSort();
         timSort();
-        timeFinishedAll = System.nanoTime();
-        long duration = (timeFinished - timeStart) / 10000;
-        System.out.println("All sorting algorithms finished in " + duration + "ms");
+        timeFinishedAll = System.currentTimeMillis();
+        long duration = (timeFinished - timeStart) / 1000;
+        System.out.println("All sorting algorithms finished in " + duration + "s");
     }
     public void initFiles() throws IOException {
         sortedFile = new File("sortedFile.dat");
@@ -68,36 +68,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.insertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Insertion Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.insertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.insertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -106,37 +106,38 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.binaryInsertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Binary Insertion Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.binaryInsertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.binaryInsertionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
+
     }
 
     private void selectionSort() throws IOException {
@@ -144,36 +145,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.selectionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Selection Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.selectionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.selectionSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -182,36 +183,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.bubbleSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Bubble Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.bubbleSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.bubbleSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -220,36 +221,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shakeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Shake Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shakeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shakeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -258,36 +259,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shellSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Shell Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shellSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.shellSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -296,36 +297,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.heapSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Heap Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.heapSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.heapSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -334,36 +335,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Quick Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -372,36 +373,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSortWithPivot();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Quick Sort W/ Pivot;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSortWithPivot();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.quickSortWithPivot();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -410,36 +411,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.mergeSort2();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Merge Sort 2;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.mergeSort2();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.mergeSort2();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -448,36 +449,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.countingSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Counting Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.countingSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.countingSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -486,36 +487,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.radixSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Radix Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.radixSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.radixSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -524,36 +525,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.combSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Comb Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.combSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.combSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -562,36 +563,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.gnomeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Gnome Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.gnomeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.gnomeSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 
@@ -600,36 +601,36 @@ public class MakeTable {
         fileCopy.copyFile(sortedFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.timSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        long duration = (timeFinished - timeStart) / 100000;
+        long duration = (timeFinished - timeStart) / 1000;
         table.writeBytes("Tim Sort;" + comparisons + "; ;" + permutations + "; ;" + duration);
 
         // Reverse File
         fileCopy.copyFile(reverseFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.timSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;"+ duration);
 
         // Random File
         fileCopy.copyFile(randomFile);
         fileCopy.initComparisons();
         fileCopy.initPermatitons();
-        timeStart = System.nanoTime();
+        timeStart = System.currentTimeMillis();
         fileCopy.timSort();
-        timeFinished = System.nanoTime();
+        timeFinished = System.currentTimeMillis();
         comparisons = fileCopy.getComparisons();
         permutations = fileCopy.getPermutations();
-        duration = (timeFinished - timeStart) / 100000;
+        duration = (timeFinished - timeStart) / 1000;
         table.writeBytes(";" + comparisons + "; ;" + permutations +"; ;" + duration + "\n");
     }
 }

@@ -234,7 +234,7 @@ public class File {
                 seek(j - 1);
                 record2.read(file);
                 record2.write(file);
-                comparisons++;
+                permutations++;
             }
             seek(pos);
             record1.write(file);

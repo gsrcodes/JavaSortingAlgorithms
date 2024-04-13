@@ -15,7 +15,7 @@ public class File {
     public void initComparisons() {
         comparisons = 0;
     }
-    public void initPermatitons(){
+    public void initMovements(){
         movements = 0;
     }
 
@@ -49,6 +49,10 @@ public class File {
         try {
             file.seek(pos * Record.length());
         }catch (IOException e){}
+    }
+
+    public void close() throws IOException {
+        file.close();
     }
 
     public int filesize() {
@@ -238,8 +242,8 @@ public class File {
                 movements++;
             }
             seek(pos);
+            movements++;
             record1.write(file);
-            comparisons++;
         }
     }
 
@@ -265,10 +269,11 @@ public class File {
 
             seek(smallerPos);
             record.write(file);
+            movements++;
 
             seek(i);
             smaller.write(file);
-            movements += 2;
+            movements++;
         }
     }
 
@@ -462,8 +467,7 @@ public class File {
         quickSortWithoutPivot(0, filesize() - 1);
     }
 
-    public void quickSortWithoutPivot(int start, int end)
-    {
+    public void quickSortWithoutPivot(int start, int end) {
         int i = start, j = end;
         boolean flag = true;
         Record record1 = new Record();
@@ -737,7 +741,6 @@ public class File {
         }
     }
 
-
     public void timSort() {
         int size = filesize() - 1;
         int timSize = 32;
@@ -752,6 +755,121 @@ public class File {
                 int right = Math.min((left + 2 * range - 1), size);
                 fusion(auxFile, left, middle, middle + 1, right);
             }
+        }
+    }
+
+    public void bucketSort() {
+        int largest = getLargest()+1;
+        int nBuckets = (int) Math.sqrt(largest), pos;
+        int max = (largest-1)/nBuckets;
+        BucketList lb = new BucketList();
+        Record reg = new Record();
+        List listaAux;
+        Bucket b;
+
+        for(int i = 0; i < nBuckets; i++)
+            lb.insertEnd(i);
+
+        int i=0;
+        while(i < filesize()) {
+            seek(i);
+            reg.read(file);
+            pos = (reg.getKey()-1) / (max+1);
+            listaAux = lb.searchBucket(pos).getList();
+            listaAux.insertEnd(reg);
+            listaAux.insertionSort();
+            comparisons += listaAux.getComparisons();
+            i++;
+        }
+
+        b = lb.getStart();
+        Node node;
+        i = 0;
+        while(b != null) {
+            node = b.getList().getStart();
+            while(node != null) {
+                seek(i);
+                reg = node.getRecord();
+                movements++;
+                reg.write(file);
+                node = node.getNext();
+                i++;
+            }
+            b = b.getNext();
+        }
+    }
+
+    public void fusion(File file1, File file2, int seq) {
+        int i = 0, j = 0, k = 0, auxSeq = seq;
+        Record record1 = new Record();
+        Record record2 = new Record();
+        while (k < filesize()) {
+            while (i < seq && j < seq) {
+                file1.seek(i);
+                record1.read(file1.getFile());
+                file2.seek(j);
+                record2.read(file2.getFile());
+                movements++;
+                if (record1.getKey() < record2.getKey()) {
+                    i++;
+                    seek(k++);
+                    record1.write(file);
+                    movements++;
+                }
+                else {
+                    j++;
+                    seek(k++);
+                    record2.write(file);
+                    movements++;
+                }
+            }
+
+            while (i < seq) {
+                file1.seek(i++);
+                record1.read(file1.getFile());
+                seek(k++);
+                record1.write(file);
+                movements++;
+            }
+            while (j < seq) {
+                file2.seek(j++);
+                record2.read(file2.getFile());
+                seek(k++);
+                record2.write(file);
+                movements++;
+            }
+            seq = seq + auxSeq;
+        }
+    }
+
+    public void partition(File file1, File file2){
+        int size = filesize() / 2;
+        Record record = new Record();
+        for (int i = 0; i < size; i++) {
+            seek(i);
+            record.read(file);
+            file1.seek(i);
+            record.write(file1.getFile());
+
+            seek(i + size);
+            record.read(file);
+            file2.seek(i);
+            record.write(file2.getFile());
+
+            movements += 2;
+        }
+        file1.truncate(size);
+        file2.truncate(size);
+    }
+
+    public void mergeSort() {
+        int seq = 1;
+        File file1 = new File("mergeFile1.dat");
+        File file2 = new File("mergeFile2.dat");
+        while (seq < filesize()) {
+            partition(file1, file2);
+            fusion(file1, file2, seq);
+            seq = seq * 2;
         }
     }
 }

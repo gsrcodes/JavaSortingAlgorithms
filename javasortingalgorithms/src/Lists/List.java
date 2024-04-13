@@ -265,7 +265,7 @@ public class List {
     }
 
     public void shellSort() {
-        for (int gap = logicalSize / 2; gap > 0; gap /= 2) // gap = distance between elements to be compared
+        for (int gap = logicalSize / 3; gap > 0; gap /= 3) // gap = distance between elements to be compared
             for (int i = gap; i < logicalSize; i++) {
                 int current = getNode(i).getKey();
                 int j = i;
@@ -361,11 +361,11 @@ public class List {
     }
 
     public void countingSort() {
-        int maior = getLargest();
-        int[] vet = new int[maior];
+        int largest = getLargest();
+        int[] vet = new int[largest];
         int tam = logicalSize;
 
-        for(int i=0; i<maior; i++)
+        for(int i = 0; i < largest; i++)
             vet[i] = 0;
 
         Node aux = start;
@@ -374,7 +374,7 @@ public class List {
             aux = aux.getNext();
         }
 
-        for(int i=1; i<maior; i++) // counting array
+        for(int i=1; i<largest; i++) // counting array
             vet[i] += vet[i-1];
 
         List listAux = new List();

@@ -62,13 +62,43 @@ public class List {
         System.out.println(print);
     }
 
-    private Node getNode(int pos) { // Get x node by position
+    private Node getNode(int pos) { // get x node by position
         Node aux = start;
         for (int i = 0; i < pos; i++)
             aux = aux.getNext();
         return aux;
     }
 
+    public int getPosition(Node nodeAux){ // get x position by node
+        Node nodeI = start;
+        int i = 0;
+        while(nodeI != null && nodeI != nodeAux) {
+            nodeI = nodeI.getNext();
+            i++;
+        }
+        return i;
+    }
+
+    public Node setPosition(Node node, int currentPos, int finalPos)
+    {
+        Node nodeAux = node;
+        int i;
+        if(currentPos > finalPos) {
+            i = currentPos-finalPos;
+            while(nodeAux != null && i>0) {
+                i--;
+                nodeAux = nodeAux.getPrev();
+            }
+        }
+        else if(currentPos < finalPos) {
+            i = finalPos-currentPos;
+            while(nodeAux != null && i>0) {
+                i--;
+                nodeAux = nodeAux.getNext();
+            }
+        }
+        return nodeAux;
+    }
 
     private void swaps(Node i, Node j) {
         int temp = i.getKey();
@@ -107,21 +137,104 @@ public class List {
         return largest;
     }
 
-    // Sort Algorithms
-
-    public void InsertionSort() {
-        int aux;
-        Node i, pos;
-        i = start.getNext();
-        while (i != null) {
-            aux = i.getKey();
-            pos = i;
-            while (pos != start && aux < pos.getPrev().getKey()) {
-                pos.setKey(pos.getPrev().getKey());
-                pos = pos.getPrev();
+    public void fusion1 (List part1, List part2, int seq, int len) {
+        Node  nodeI = part1.getStart(), nodeJ = part2.getStart(), startAux = start;
+        int auxSeq = seq, startAuxPos=0, nodeIPos=0, nodeJPos=0;
+        while(startAuxPos < len) {
+            while(nodeIPos < seq && nodeJPos < seq) {
+                if(nodeI.getKey() < nodeJ.getKey()) {
+                    startAux.setKey(nodeI.getKey());
+                    nodeI = nodeI.getNext();
+                    nodeIPos++;
+                }
+                else {
+                    startAux.setKey(nodeJ.getKey());
+                    nodeJ = nodeJ.getNext();
+                    nodeJPos++;
+                }
+                startAux = startAux.getNext();
+                startAuxPos++;
             }
-            pos.setKey(aux);
-            i = i.getNext();
+            while(nodeIPos < seq) {
+                startAux.setKey(nodeI.getKey());
+                startAux = startAux.getNext();
+                startAuxPos++;
+                nodeI = nodeI.getNext();
+                nodeIPos++;
+            }
+            while(nodeJPos < seq) {
+                startAux.setKey(nodeJ.getKey());
+                startAux = startAux.getNext();
+                startAuxPos++;
+                nodeJ = nodeJ.getNext();
+                nodeJPos++;
+            }
+            seq += auxSeq;
+        }
+    }
+
+    public void fusion2(List part1, int start1, int end1, int start2, int end2) {
+        part1.start = part1.end = null;
+        Node nodeI = start, nodeJ = start, nodeK, nodeAUx = start;
+        int nodeIPos = 0, nodeJPos = 0, nodeKPos = 0, nodeAuxPos = 0;
+
+        nodeI = setPosition(nodeI, nodeIPos, start1);
+        nodeIPos = start1;
+        nodeJ = setPosition(nodeJ, nodeJPos, start2);
+        nodeJPos = start2;
+
+        while(nodeIPos<=end1 && nodeJPos<=end2)
+            if(nodeI.getKey() < nodeJ.getKey()) {
+                part1.insertEnd(nodeI.getKey());
+                nodeI = nodeI.getNext();
+                nodeIPos++;
+                nodeKPos++;
+            }
+            else {
+                part1.insertEnd(nodeJ.getKey());
+                nodeJ = nodeJ.getNext();
+                nodeJPos++;
+                nodeKPos++;
+            }
+        while(nodeIPos <= end1 && nodeI.getNext() != null) {
+            part1.insertEnd(nodeI.getKey());
+            nodeI = nodeI.getNext();
+            nodeIPos++;
+            nodeKPos++;
+        }
+        while(nodeJPos <= end2 && nodeJ.getNext() != null) {
+            part1.insertEnd(nodeJ.getKey());
+            nodeJ = nodeJ.getNext();
+            nodeJPos++;
+            nodeKPos++;
+        }
+        nodeK = part1.getStart();
+        int count = 0;
+        while(count < nodeKPos) {
+            nodeAUx = setPosition(nodeAUx, nodeAuxPos, count+start1);
+            nodeAuxPos = count+start1;
+            nodeAUx.setKey(nodeK.getKey());
+            nodeK = nodeK.getNext();
+            count++;
+        }
+    }
+
+    // Sorting Algorithms
+
+    public void insertionSort() {
+        Node startSearch = this.start.getNext(), posPointer;
+        int auxInt;
+
+        while(startSearch != null) {
+            auxInt = startSearch.getKey();
+            posPointer = startSearch;
+            while(posPointer != this.start && auxInt < posPointer.getPrev().getKey()){
+                posPointer.setKey(posPointer.getPrev().getKey());
+                posPointer = posPointer.getPrev();
+            }
+
+            posPointer.setKey(auxInt);
+            startSearch = startSearch.getNext();
         }
     }
 
@@ -209,23 +322,6 @@ public class List {
                 current = current.getPrev();
             }
             start = start.getNext();
-        }
-    }
-
-    public void insertionSort() {
-        Node startSearch = this.start.getNext(), posPointer;
-        int auxInt;
-
-        while(startSearch != null) {
-            auxInt = startSearch.getKey();
-            posPointer = startSearch;
-            while(posPointer != this.start && auxInt < posPointer.getPrev().getKey()){
-                posPointer.setKey(posPointer.getPrev().getKey());
-                posPointer = posPointer.getPrev();
-            }
-
-            posPointer.setKey(auxInt);
-            startSearch = startSearch.getNext();
         }
     }
 
@@ -377,44 +473,44 @@ public class List {
 
     public void countingSort() {
         int largest = getLargest();
-        int[] vet = new int[largest];
-        int tam = logicalSize;
+        int[] array = new int[largest];
+        int len = logicalSize;
 
         for(int i = 0; i < largest; i++)
-            vet[i] = 0;
+            array[i] = 0;
 
-        Node aux = start;
-        while(aux != null) {
-            vet[aux.getKey()-1]++; // frequency array
-            aux = aux.getNext();
+        Node node = start;
+        while(node != null) {
+            array[node.getKey()-1]++; // frequency array
+            node = node.getNext();
         }
 
-        for(int i=1; i<largest; i++) // counting array
-            vet[i] += vet[i-1];
+        for(int i = 1; i < largest; i++) // counting array
+            array[i] += array[i-1];
 
         List listAux = new List();
-        for(int i=0; i<=tam; i++)
+        for(int i = 0; i <= len; i++)
             listAux.insertEnd(0);
 
-        aux = start;
+        node = start;
         Node nodeAux;
-        while(aux!= null) {
+        while(node!= null) {
             nodeAux = listAux.getStart();
             int i=0;
-            while(nodeAux != null && i < vet[aux.getKey()-1]-1) {
+            while(nodeAux != null && i < array[node.getKey()-1]-1) {
                 i++;
                 nodeAux = nodeAux.getNext();
             }
-            vet[aux.getKey()-1]--;
-            nodeAux.setKey(aux.getKey());
-            aux = aux.getNext();
+            array[node.getKey()-1]--;
+            nodeAux.setKey(node.getKey());
+            node = node.getNext();
         }
 
-        aux = start;
+        node = start;
         nodeAux = listAux.getStart();
-        while(aux != null && nodeAux != null) {
-            aux.setKey(nodeAux.getKey());
-            aux = aux.getNext();
+        while(node != null && nodeAux != null) {
+            node.setKey(nodeAux.getKey());
+            node = node.getNext();
             nodeAux = nodeAux.getNext();
         }
     }
@@ -430,42 +526,6 @@ public class List {
         while(auxMiddle != null) {
             part2.insertEnd(auxMiddle.getKey());
             auxMiddle = auxMiddle.getNext();
-        }
-    }
-
-    public void fusion1 (List part1, List part2, int seq, int len) {
-        Node  nodeI = part1.getStart(), nodeJ = part2.getStart(), startAux = start;
-        int auxSeq = seq, startAuxPos=0, nodeIPos=0, nodeJPos=0;
-        while(startAuxPos < len) {
-            while(nodeIPos < seq && nodeJPos < seq) {
-                if(nodeI.getKey() < nodeJ.getKey()) {
-                    startAux.setKey(nodeI.getKey());
-                    nodeI = nodeI.getNext();
-                    nodeIPos++;
-                }
-                else {
-                    startAux.setKey(nodeJ.getKey());
-                    nodeJ = nodeJ.getNext();
-                    nodeJPos++;
-                }
-                startAux = startAux.getNext();
-                startAuxPos++;
-            }
-            while(nodeIPos < seq) {
-                startAux.setKey(nodeI.getKey());
-                startAux = startAux.getNext();
-                startAuxPos++;
-                nodeI = nodeI.getNext();
-                nodeIPos++;
-            }
-            while(nodeJPos < seq) {
-                startAux.setKey(nodeJ.getKey());
-                startAux = startAux.getNext();
-                startAuxPos++;
-                nodeJ = nodeJ.getNext();
-                nodeJPos++;
-            }
-            seq += auxSeq;
         }
     }
 
@@ -485,27 +545,26 @@ public class List {
             radixCountingSort(i);
     }
 
-    public void radixCountingSort(int v) // radixSort
-    {
+    public void radixCountingSort(int v) {
         int pos, j, i;
-        int[] vet = new int[10];
+        int[] array = new int[10];
         List listAux = new List();
         for(i=  0; i <= logicalSize; i++)
             listAux.insertEnd(0);
 
         Node nodeAux = start;
         for(i = 0; i < logicalSize; i++) {
-            vet[(nodeAux.getKey()/v)%10]++;
+            array[(nodeAux.getKey()/v)%10]++;
             nodeAux = nodeAux.getNext();
         }
 
         for(i = 1; i < 10; i++)
-            vet[i] += vet[i-1];
+            array[i] += array[i-1];
 
         Node auxEnd = end;
         for(i = logicalSize; i > 0; i--)
         {
-            pos = vet[(auxEnd.getKey()/v) %10]-1;
+            pos = array[(auxEnd.getKey()/v) %10]-1;
             j = 0;
             nodeAux = listAux.getStart();
             while(nodeAux != null && j < pos) {
@@ -513,7 +572,7 @@ public class List {
                 j++;
             }
             nodeAux.setKey(auxEnd.getKey());
-            vet[(auxEnd.getKey()/v)%10]--;
+            array[(auxEnd.getKey()/v)%10]--;
             auxEnd = auxEnd.getPrev();
         }
 
@@ -525,70 +584,6 @@ public class List {
             startAux = startAux.getNext();
             nodeAux = nodeAux.getNext();
         }
-    }
-
-    private void timInsertionSort(int left, int right) {
-        int temp, j;
-        for (int i = left + 1; i <= right; i++) {
-            temp = getNode(i).getKey();
-            j = i - 1;
-            while (getNode(j).getKey() > temp && j >= left) {
-                getNode(j + 1).setKey(getNode(j).getKey());
-                j--;
-            }
-            getNode(j + 1).setKey(temp);
-        }
-    }
-
-    private void timMerge(int left, int middle, int right) {
-        int len1 = middle - left + 1, len2 = right - middle, i = 0, j = 0, k = left;
-        int[] leftArray = new int[len1];
-        int[] rightArray = new int[len2];
-        for (int x = 0; x < len1; x++)
-            leftArray[x] = getNode(left + x).getKey();
-        for (int x = 0; x < len2; x++)
-            rightArray[x] = getNode(middle + 1 + x).getKey();
-
-        while (i < len1 && j < len2) {
-            if (leftArray[i] <= rightArray[j]) {
-                getNode(k).setKey(leftArray[i]);
-                i++;
-            }
-            else {
-                getNode(k).setKey(rightArray[j]);
-                j++;
-            }
-            k++;
-        }
-
-        while (i < len1) {
-            getNode(k).setKey(leftArray[i]);
-            k++;
-            i++;
-        }
-
-        while (j < len2) {
-            getNode(k).setKey(rightArray[j]);
-            k++;
-            j++;
-        }
-    }
-
-    public void timSort() {
-        int n = logicalSize, RUN = 32;
-        int smaller;
-
-        for (int i = 0; i < n; i = i + RUN) {
-            smaller = Math.min(i + 31, n - 1); // smaller = math.min get the smaller between (x, y)
-            timInsertionSort(i, smaller);
-        }
-
-        for (int size = RUN; size < n; size = 2 * size)
-            for (int left = 0; left < n; left += 2 * size) {
-                int middle = left + size - 1;
-                int right = Math.min((left + 2 * size - 1), (n - 1));
-                timMerge(left, middle, right);
-            }
     }
 
     public void bucketSort() {
@@ -625,40 +620,55 @@ public class List {
         }
     }
 
-    public void merge2(int left, int middle, int right) {
-        int len = middle - left + 1, len_aux = right - middle, i , j = 0, k = left;
-        int[] array1 = new int[len];
-        int[] array2 = new int[len_aux];
+    public void timSortInsertionSort(int left, int right) {
+        int nodeIPos = 0, nodeJPos, value;
+        Node nodeI = start, nodeJ;
+        nodeI = setPosition(nodeI, nodeIPos, nodeIPos = left);
 
-        for (i = 0; i < len; i++)
-            array1[i] = getNode(left + i).getKey();
-        for (i = 0; i < len_aux; i++)
-            array2[i] = getNode(middle + 1 + i).getKey();
-
-        i = 0;
-        while (i < len && j < len_aux) {
-            if (array1[i] < array2[j])
-                getNode(k++).setKey(array1[i++]);
-            else
-                getNode(k++).setKey(array2[j++]);
+        while(nodeIPos <= right) {
+            nodeJ = nodeI;
+            nodeJPos = nodeIPos;
+            value = nodeI.getKey();
+            while(nodeJPos >left && value < nodeJ.getPrev().getKey()) {
+                nodeJ.setKey(nodeJ.getPrev().getKey());
+                nodeJ = nodeJ.getPrev();
+                nodeJPos--;
+            }
+            nodeJ.setKey(value);
+            nodeI = nodeI.getNext();
+            nodeIPos++;
         }
-
-        while (i < len)
-            getNode(k++).setKey(array1[i++]);
-        while (j < len_aux)
-            getNode(k++).setKey(array2[j++]);
     }
 
-    public void mergeS2(int left, int right) {
-        if (left < right) {
-            int middle = left + (right - left) / 2;
-            mergeS2(left, middle);
-            mergeS2(middle + 1, right);
-            merge2(left, middle, right);
+    public void timSort() {
+        int len = logicalSize - 1;
+        int tim = 32;
+        List part1 = new List();
+
+        for(int i = 0; i < len; i += tim)
+            timSortInsertionSort(i, Math.min((i + 31), len));
+
+        for(int range = tim; range < len; range = 2*range)
+            for(int left = 0; left < len; left += 2*range) {
+                int middle = left + range-1;
+                int right = Math.min((left+2 * range-1), len);
+                fusion2(part1, left, middle, middle+1, right);
+            }
+    }
+
+    public void Merge(List part1, int esq, int dir){
+        int meio;
+        if(esq < dir) {
+            meio = (esq+dir)/2;
+            Merge(part1, esq, meio);
+            Merge(part1, meio+1, dir);
+            fusion2(part1, esq, meio, meio+1, dir);
         }
     }
 
     public void mergeSort2() {
-        mergeS2(0, logicalSize - 1);
+        List part1 = new List();
+        int esq = 0, dir = getPosition(end);
+        Merge(part1, esq, dir);
     }
 }

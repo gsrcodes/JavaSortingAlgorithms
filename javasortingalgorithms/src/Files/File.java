@@ -868,7 +868,7 @@ public class File {
         while (seq < filesize()) {
             partition(file1, file2);
             fusion(file1, file2, seq);
-            seq += 2;
+            seq *= 2;
         }
     }
 }

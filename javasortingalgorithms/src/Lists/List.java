@@ -265,16 +265,31 @@ public class List {
     }
 
     public void shellSort() {
-        for (int gap = logicalSize / 3; gap > 0; gap /= 3) // gap = distance between elements to be compared
-            for (int i = gap; i < logicalSize; i++) {
-                int current = getNode(i).getKey();
-                int j = i;
-                while (j >= gap && getNode(j - gap).getKey() > current) {
-                    getNode(j).setKey(getNode(j - gap).getKey());
-                    j -= gap;
+        int gap = 1, aux, i, j;
+        while (gap < logicalSize)
+            gap = gap * 3 + 1;
+        gap = gap / 3;
+        while (gap > 0) {
+            Node current;
+            for (i = gap; i < logicalSize; i++) {
+                current = getNode(i);
+                aux = current.getKey();
+                j = i;
+
+                Node nodeJ = getNode(j);
+                Node nodeGap = getNode(j - gap);
+
+                while (j - gap >= 0 && aux < getNode(j-gap).getKey()) {
+                    nodeJ.setKey(nodeGap.getKey());
+                    j = j - gap;
+
+                    nodeJ = getNode(j);
+                    nodeGap = getNode(j - gap);
                 }
-                getNode(j).setKey(current);
+                getNode(j).setKey(aux);
             }
+            gap /= 3;
+        }
     }
 
     public void quickWithoutPivot() {

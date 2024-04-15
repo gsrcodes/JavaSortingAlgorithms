@@ -376,39 +376,36 @@ public class File {
     }
 
     public void shellSort() {
-        Record record1 = new Record();
-        Record record2 = new Record();
-        int i, j, k, dist;
-        for (dist = 4; dist > 0; dist /= 2)
-            for (i = 0; i < dist; i++)
-                for (j = i; j + dist < filesize(); j += dist) {
-                    seek(j);
-                    record1.read(file);
-                    seek(j + dist);
-                    record2.read(file);
-                    comparisons++;
-                    if (record1.getKey() > record2.getKey()) {
-                        movements += 2;
-                        swaps(j, j + dist);
-                        k = j;
-                        seek(k);
-                        record1.read(file);
-                        seek(k - dist);
-                        record2.read(file);
-                        comparisons++;
-                        while (k - dist >= i && record1.getKey() < record2.getKey()) {
-                            comparisons++;
-                            movements += 2;
-                            swaps(k, k - dist);
-                            k -= dist;
-                            seek(k);
-                            record1.read(file);
-                            seek(k - dist);
-                            record2.read(file);
-                        }
+        int i, j, gap = 1;
+        Record recordAux = new Record();
+        Record recordJ = new Record();
 
-                    }
+        while(gap < filesize())
+            gap = gap * 3 + 1;
+        gap = gap / 3;
+        while (gap > 0) {
+            for (i = gap; i < filesize(); i++) {
+                seek(i);
+                recordAux.read(file);
+                j = i;
+                seek(j - gap);
+                recordJ.read(file);
+                while (j - gap >= 0 && recordAux.getKey() < recordJ.getKey()) {
+                    seek(j);
+                    movements++;
+                    recordJ.write(file);
+                    j = j - gap;
+                    seek(j - gap);
+                    recordJ.read(file);
+                    comparisons++;
                 }
+                comparisons++;
+                seek(j);
+                movements++;
+                recordAux.write(file);
+            }
+            gap = gap / 3;
+        }
     }
 
     public void gnomeSort() {
@@ -439,15 +436,15 @@ public class File {
 
     public void combSort() {
         int gap = filesize();
-        boolean troca = true;
+        boolean swap = true;
         Record record1 = new Record();
         Record record2 = new Record();
 
-        while (gap != 1 || troca) {
+        while (gap != 1 || swap) {
             gap /= 1.3;
             if (gap < 1)
                 gap = 1;
-            troca = false;
+            swap = false;
             for (int i = 0; i < filesize() - gap; i++) {
                 seek(i);
                 record1.read(file);
@@ -457,7 +454,7 @@ public class File {
                 if (record1.getKey() > record2.getKey()) {
                     swaps(i, i + gap);
                     movements += 2;
-                    troca = true;
+                    swap = true;
                 }
             }
         }
@@ -540,9 +537,11 @@ public class File {
             if (i <= j) {
                 seek(i);
                 record2.write(file);
+                movements++;
+
                 seek(j);
                 record1.write(file);
-                movements += 2;
+                movements++;
                 i++;
                 j--;
             }
@@ -809,7 +808,7 @@ public class File {
                 record1.read(file1.getFile());
                 file2.seek(j);
                 record2.read(file2.getFile());
-                movements++;
+                comparisons++;
                 if (record1.getKey() < record2.getKey()) {
                     i++;
                     seek(k++);
@@ -838,7 +837,7 @@ public class File {
                 record2.write(file);
                 movements++;
             }
-            seq = seq + auxSeq;
+            seq += auxSeq;
         }
     }
 
@@ -850,13 +849,13 @@ public class File {
             record.read(file);
             file1.seek(i);
             record.write(file1.getFile());
+            movements++;
 
             seek(i + size);
             record.read(file);
             file2.seek(i);
             record.write(file2.getFile());
-
-            movements += 2;
+            movements++;
         }
         file1.truncate(size);
         file2.truncate(size);
@@ -869,7 +868,7 @@ public class File {
         while (seq < filesize()) {
             partition(file1, file2);
             fusion(file1, file2, seq);
-            seq = seq * 2;
+            seq += 2;
         }
     }
 }

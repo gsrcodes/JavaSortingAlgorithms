@@ -11,7 +11,7 @@ public class Main {
             list.insertEnd(randomValue);
         }
         list.display();
-        list.bucketSort();
+        list.shellSort();
         list.display();
     }
 }

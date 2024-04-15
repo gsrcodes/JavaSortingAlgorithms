@@ -51,10 +51,10 @@ public class MakeTable {
         sortedFile = new File("sortedFile.dat");
         randomFile = new File("randomFile.dat");
         reverseFile = new File("reverseFile.dat");
-        java.io.File fileCopyAux = new java.io.File("fileCopy.txt");
+        java.io.File fileCopyAux = new java.io.File("fileCopy.dat");
         if (fileCopyAux.exists())
             fileCopyAux.delete();
-        fileCopy = new File("fileCopy.txt");
+        fileCopy = new File("fileCopy.dat");
         java.io.File tableFile = new java.io.File("table.txt");
         if (tableFile.exists())
             tableFile.delete();
